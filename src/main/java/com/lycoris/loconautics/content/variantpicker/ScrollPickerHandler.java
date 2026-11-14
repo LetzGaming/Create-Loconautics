@@ -73,6 +73,19 @@ public final class ScrollPickerHandler {
         return ScrollMenuHandler.open(menu);
     }
 
+    public static boolean tryOpenFull() {
+        Minecraft mc = Minecraft.getInstance();
+        if (mc.screen != null || mc.player == null) return false;
+        long win = mc.getWindow().getWindow();
+        if (!InputConstants.isKeyDown(win, OPEN_KEY.getKey().getValue())) return false;
+        Block held = Block.byItem(mc.player.getMainHandItem().getItem());
+        BlockVariantRegistry.Location loc = BlockVariantRegistry.locate(held);
+        if (loc == null || !BlockVariantRegistry.hasColorChoice(loc.family())) return false;
+        ScrollMenuHandler.forceClose();
+        mc.setScreen(new BlockVariantPickerScreen(held, InteractionHand.MAIN_HAND, loc));
+        return true;
+    }
+
     private static boolean openColors(DyeColor current, Function<DyeColor, Item> itemFor) {
         List<ScrollMenu.Entry> entries = new ArrayList<>();
         for (DyeColor color : DyeColor.values()) {

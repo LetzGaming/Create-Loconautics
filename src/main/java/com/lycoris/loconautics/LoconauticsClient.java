@@ -68,6 +68,7 @@ public final class LoconauticsClient {
         NeoForge.EVENT_BUS.addListener(this::onClientTick);
         NeoForge.EVENT_BUS.addListener(this::onKeyInput);
         NeoForge.EVENT_BUS.addListener(this::onMouseScroll);
+        NeoForge.EVENT_BUS.addListener(this::onMouseButton);
         NeoForge.EVENT_BUS.addListener(this::onClientDisconnect);
         NeoForge.EVENT_BUS.addListener(this::onClientLevelUnload);
         NeoForge.EVENT_BUS.addListener(this::onUseItem);
@@ -488,6 +489,13 @@ public final class LoconauticsClient {
         if (event.getKey() == 256 && event.getAction() == 1) {
             AnalogControllerClientHandler.stopControllingClient();
             Minecraft.getInstance().setScreen(null);
+        }
+    }
+
+    private void onMouseButton(InputEvent.MouseButton.Pre event) {
+        if (event.getButton() != 1 || event.getAction() != 1) return;
+        if (com.lycoris.loconautics.content.variantpicker.ScrollPickerHandler.tryOpenFull()) {
+            event.setCanceled(true);
         }
     }
 

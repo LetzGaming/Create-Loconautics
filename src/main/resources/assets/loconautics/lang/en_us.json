@@ -314,6 +314,8 @@
   "key.loconautics.casing_picker": "Swap Casing or Bogey",
   "key.loconautics.grab_rotate": "Rotate Grabbed Object",
   "key.loconautics.variant_picker": "Swap Block Variant",
+  "gui.loconautics.variant_picker": "Swap Block Variant",
+  "gui.loconautics.variant_picker.hint": "Release %s to select",
   "block.create.package_postbox.tooltip.summary": "Sends and receives packages for the train stations nearby",
   "block.create.package_postbox.tooltip.condition1": "Holding Alt, with a Postbox in hand",
   "block.create.package_postbox.tooltip.behaviour1": "Scroll to swap between the _Postbox_ colors. The key can be changed in the controls menu.",

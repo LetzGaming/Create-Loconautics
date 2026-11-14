@@ -5,6 +5,7 @@ import com.lycoris.loconautics.content.variantpicker.data.LoadedVariantFamily;
 
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.world.level.block.Block;
+import net.neoforged.fml.ModList;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -16,6 +17,7 @@ public final class BlockVariantRegistry {
     public static final int COLOR_COUNT = 17;
     public static final int COLORLESS_INDEX = 16;
     public static final int MAX_TYPES = 16;
+    public static final int MAX_WRAPPINGS = 8;
 
     public record VariantType(String translationKey, Block[] colorVariants, Block[][] wrapped, int materialCount) {
 
@@ -62,6 +64,7 @@ public final class BlockVariantRegistry {
             for (var e : lt.colors().entrySet()) {
                 Block b = BuiltInRegistries.BLOCK.getOptional(e.getValue()).orElse(null);
                 if (b == null) {
+                    if (!ModList.get().isLoaded(e.getValue().getNamespace())) continue;
                     LoconauticsConstants.LOGGER.warn("[VariantPicker] block {} is not registered, skipped", e.getValue());
                     continue;
                 }
@@ -118,6 +121,17 @@ public final class BlockVariantRegistry {
 
     public static List<VariantType> family(int index) {
         return FAMILIES.get(index);
+    }
+
+    public static boolean hasColorChoice(int familyIndex) {
+        for (VariantType type : FAMILIES.get(familyIndex)) {
+            int count = 0;
+            for (Block b : type.colorVariants()) {
+                if (b != null) count++;
+            }
+            if (count > 1 || type.hasWrappings()) return true;
+        }
+        return false;
     }
 
     public static boolean isKnownVariant(Block block) {

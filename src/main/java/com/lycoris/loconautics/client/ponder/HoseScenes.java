@@ -58,6 +58,13 @@ public class HoseScenes {
     private static final BlockPos NOZZLE_ALONE = new BlockPos(2, 3, 2);
     private static final BlockPos SCAFFOLD = new BlockPos(1, 1, 2);
     private static final BlockPos LEVER = new BlockPos(1, 2, 2);
+    private static final BlockPos LEGS_FROM = new BlockPos(1, 1, 2);
+    private static final BlockPos LEGS_TO = new BlockPos(3, 1, 2);
+    private static final BlockPos FIREBOX = new BlockPos(1, 2, 2);
+    private static final BlockPos BODY_FIRST = new BlockPos(2, 2, 2);
+    private static final BlockPos BODY_LAST = new BlockPos(3, 2, 2);
+    private static final BlockPos BOILER_SOCKET = new BlockPos(2, 3, 2);
+    private static final BlockPos BOILER_NOZZLE = new BlockPos(2, 4, 2);
     private static final Vec3 END_LOOSE_SIDE = new Vec3(3.5, 1.5, 0.5);
     private static final Vec3 END_DOCKED = new Vec3(2.5, 2.6875, 1.5);
     private static final int HOSE_LEAD_TICKS = 1;
@@ -474,6 +481,66 @@ public class HoseScenes {
                 .attachKeyFrame()
                 .placeNearTarget()
                 .pointAt(util.vector().topOf(SOCKET_ALONE));
+        scene.idle(70);
+    }
+
+    public static void boiler(SceneBuilder builder, SceneBuildingUtil util) {
+        CreateSceneBuilder scene = open(builder, "nozzle_socket_boiler", "Watering Boilers through Nozzle Sockets");
+
+        scene.world().showSection(util.select().fromTo(LEGS_FROM, LEGS_TO), Direction.DOWN);
+        scene.idle(5);
+        scene.world().showSection(util.select().position(FIREBOX), Direction.DOWN);
+        scene.idle(5);
+        scene.world().showSection(util.select().fromTo(BODY_FIRST, BODY_LAST), Direction.DOWN);
+        scene.idle(10);
+        scene.world().showSection(util.select().position(BOILER_SOCKET), Direction.DOWN);
+        scene.idle(10);
+        scene.world().modifyBlock(BOILER_SOCKET, state -> state.setValue(BlockStateProperties.OPEN, true), false);
+        scene.overlay().showText(60)
+                .text("A Nozzle Socket touching a Boiler Body is a water inlet")
+                .attachKeyFrame()
+                .placeNearTarget()
+                .pointAt(util.vector().topOf(BOILER_SOCKET));
+        scene.idle(70);
+
+        ElementLink<WorldSectionElement> nozzle =
+                scene.world().showIndependentSection(util.select().position(BOILER_NOZZLE), Direction.DOWN);
+        scene.idle(15);
+        scene.world().moveSection(nozzle, new Vec3(0.0, -0.3125, 0.0), 12);
+        scene.idle(15);
+        scene.overlay().showLine(PonderPalette.BLUE, new Vec3(2.5, 4.2, 2.5), new Vec3(2.5, 2.6, 2.5), 60);
+        scene.overlay().showText(60)
+                .text("A docked nozzle pours its Water through the socket into the boiler")
+                .attachKeyFrame()
+                .placeNearTarget()
+                .pointAt(util.vector().topOf(BOILER_SOCKET));
+        scene.idle(70);
+
+        scene.world().hideIndependentSection(nozzle, Direction.UP);
+        scene.idle(10);
+        scene.overlay().showOutline(PonderPalette.BLUE, "socket", util.select().position(BOILER_SOCKET), 60);
+        scene.overlay().showText(60)
+                .text("Without a nozzle the socket keeps Water in its own tank...")
+                .attachKeyFrame()
+                .placeNearTarget()
+                .pointAt(util.vector().topOf(BOILER_SOCKET));
+        scene.idle(70);
+
+        scene.overlay().showOutline(PonderPalette.BLUE, "firebox", util.select().position(FIREBOX), 60);
+        scene.overlay().showLine(PonderPalette.BLUE, new Vec3(2.5, 3.4, 2.5), new Vec3(1.5, 2.6, 2.5), 60);
+        scene.overlay().showText(60)
+                .text("...and the Firebox draws from it until the boiler is full")
+                .placeNearTarget()
+                .pointAt(util.vector().topOf(FIREBOX));
+        scene.idle(70);
+
+        scene.overlay().showOutline(PonderPalette.RED, "body", util.select().fromTo(BODY_FIRST, BODY_LAST), 60);
+        scene.overlay().showText(60)
+                .text("A Boiler Body only takes in Water")
+                .attachKeyFrame()
+                .colored(PonderPalette.RED)
+                .placeNearTarget()
+                .pointAt(util.vector().topOf(new BlockPos(3, 2, 2)));
         scene.idle(70);
     }
 

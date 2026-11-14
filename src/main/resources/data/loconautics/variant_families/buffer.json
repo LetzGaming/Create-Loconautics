@@ -1,0 +1,20 @@
+{
+  "blocks": [
+    "loconautics:white_buffer",
+    "loconautics:orange_buffer",
+    "loconautics:magenta_buffer",
+    "loconautics:light_blue_buffer",
+    "loconautics:yellow_buffer",
+    "loconautics:lime_buffer",
+    "loconautics:pink_buffer",
+    "loconautics:gray_buffer",
+    "loconautics:light_gray_buffer",
+    "loconautics:cyan_buffer",
+    "loconautics:purple_buffer",
+    "loconautics:blue_buffer",
+    "loconautics:brown_buffer",
+    "loconautics:green_buffer",
+    "loconautics:red_buffer",
+    "loconautics:black_buffer"
+  ]
+}

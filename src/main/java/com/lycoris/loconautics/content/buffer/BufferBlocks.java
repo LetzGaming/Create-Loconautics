@@ -4,6 +4,7 @@ import com.lycoris.loconautics.foundation.LoconauticsBlockProperties;
 import com.lycoris.loconautics.registry.LoconauticsRegistries;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.item.BlockItem;
+import com.lycoris.loconautics.foundation.ColorOrder;
 import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
@@ -12,7 +13,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.neoforged.neoforge.registries.DeferredHolder;
 
 import java.util.Collections;
-import java.util.EnumMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 public final class BufferBlocks {
@@ -37,8 +38,8 @@ public final class BufferBlocks {
     }
 
     private static Map<DyeColor, DeferredHolder<Block, BufferBlock>> registerBuffers() {
-        Map<DyeColor, DeferredHolder<Block, BufferBlock>> buffers = new EnumMap<>(DyeColor.class);
-        for (DyeColor color : DyeColor.values()) {
+        Map<DyeColor, DeferredHolder<Block, BufferBlock>> buffers = new LinkedHashMap<>();
+        for (DyeColor color : ColorOrder.ORDER) {
             buffers.put(color, LoconauticsRegistries.BLOCKS.register(bufferName(color), () ->
                     new BufferBlock(LoconauticsBlockProperties.metallic().noOcclusion(), color)));
         }
@@ -46,8 +47,8 @@ public final class BufferBlocks {
     }
 
     private static Map<DyeColor, DeferredHolder<Item, BlockItem>> registerItems() {
-        Map<DyeColor, DeferredHolder<Item, BlockItem>> items = new EnumMap<>(DyeColor.class);
-        for (DyeColor color : DyeColor.values()) {
+        Map<DyeColor, DeferredHolder<Item, BlockItem>> items = new LinkedHashMap<>();
+        for (DyeColor color : ColorOrder.ORDER) {
             items.put(color, LoconauticsRegistries.ITEMS.register(bufferName(color), () ->
                     new BlockItem(BUFFERS.get(color).get(), new Item.Properties().stacksTo(64))));
         }

@@ -4,6 +4,7 @@ import com.lycoris.loconautics.foundation.LoconauticsBlockProperties;
 import com.lycoris.loconautics.registry.LoconauticsRegistries;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.item.BlockItem;
+import com.lycoris.loconautics.foundation.ColorOrder;
 import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
@@ -12,7 +13,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.neoforged.neoforge.registries.DeferredHolder;
 
 import java.util.Collections;
-import java.util.EnumMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 public final class DashboardBlocks {
@@ -30,8 +31,8 @@ public final class DashboardBlocks {
     }
 
     private static Map<DyeColor, DeferredHolder<Block, DashboardBlock>> registerDashboards() {
-        Map<DyeColor, DeferredHolder<Block, DashboardBlock>> boards = new EnumMap<>(DyeColor.class);
-        for (DyeColor color : DyeColor.values()) {
+        Map<DyeColor, DeferredHolder<Block, DashboardBlock>> boards = new LinkedHashMap<>();
+        for (DyeColor color : ColorOrder.ORDER) {
             boards.put(color, LoconauticsRegistries.BLOCKS.register(dashboardName(color), () ->
                     new DashboardBlock(LoconauticsBlockProperties.metallic().noOcclusion(), color)));
         }
@@ -39,8 +40,8 @@ public final class DashboardBlocks {
     }
 
     private static Map<DyeColor, DeferredHolder<Item, BlockItem>> registerDashboardItems() {
-        Map<DyeColor, DeferredHolder<Item, BlockItem>> items = new EnumMap<>(DyeColor.class);
-        for (DyeColor color : DyeColor.values()) {
+        Map<DyeColor, DeferredHolder<Item, BlockItem>> items = new LinkedHashMap<>();
+        for (DyeColor color : ColorOrder.ORDER) {
             items.put(color, LoconauticsRegistries.ITEMS.register(dashboardName(color), () ->
                     new BlockItem(DASHBOARDS.get(color).get(), new Item.Properties().stacksTo(64))));
         }

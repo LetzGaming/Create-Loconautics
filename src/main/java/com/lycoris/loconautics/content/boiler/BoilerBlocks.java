@@ -20,6 +20,7 @@ import com.lycoris.loconautics.registry.LoconauticsRegistries;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.world.item.BlockItem;
+import com.lycoris.loconautics.foundation.ColorOrder;
 import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
@@ -35,7 +36,6 @@ import net.neoforged.neoforge.registries.DeferredRegister;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.EnumMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -86,7 +86,7 @@ public final class BoilerBlocks {
 
     public static final List<String> BODY_KINDS = List.of("ribbed", "paneled", "plated", "framed", "slatted");
 
-    public static final List<DyeColor> BODY_COLORS = List.of(DyeColor.values());
+    public static final List<DyeColor> BODY_COLORS = ColorOrder.ORDER;
 
     public static final Map<String, Map<DyeColor, DeferredHolder<Block, DyedBoilerBarrelBlock>>> DYED_BODIES =
             registerDyedBodies();
@@ -129,7 +129,7 @@ public final class BoilerBlocks {
     private static Map<String, Map<DyeColor, DeferredHolder<Block, DyedBoilerBarrelBlock>>> registerDyedBodies() {
         Map<String, Map<DyeColor, DeferredHolder<Block, DyedBoilerBarrelBlock>>> all = new LinkedHashMap<>();
         for (String kind : BODY_KINDS) {
-            Map<DyeColor, DeferredHolder<Block, DyedBoilerBarrelBlock>> byColor = new EnumMap<>(DyeColor.class);
+            Map<DyeColor, DeferredHolder<Block, DyedBoilerBarrelBlock>> byColor = new LinkedHashMap<>();
             for (DyeColor color : BODY_COLORS) {
                 byColor.put(color, LoconauticsRegistries.BLOCKS.register(bodyName(color, kind), () ->
                         new DyedBoilerBarrelBlock(barrel(), kind, color)));
@@ -142,7 +142,7 @@ public final class BoilerBlocks {
     private static Map<String, Map<DyeColor, DeferredHolder<Item, BlockItem>>> registerDyedBodyItems() {
         Map<String, Map<DyeColor, DeferredHolder<Item, BlockItem>>> all = new LinkedHashMap<>();
         for (String kind : BODY_KINDS) {
-            Map<DyeColor, DeferredHolder<Item, BlockItem>> byColor = new EnumMap<>(DyeColor.class);
+            Map<DyeColor, DeferredHolder<Item, BlockItem>> byColor = new LinkedHashMap<>();
             for (DyeColor color : BODY_COLORS) {
                 byColor.put(color, LoconauticsRegistries.ITEMS.register(bodyName(color, kind), () ->
                         new BoilerBarrelItem(DYED_BODIES.get(kind).get(color).get(),

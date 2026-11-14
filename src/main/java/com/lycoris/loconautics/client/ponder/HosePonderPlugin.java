@@ -28,9 +28,11 @@ public class HosePonderPlugin implements PonderPlugin {
 
         helper.forComponents(LoconauticsRegistries.HOSE_NOZZLE.getId())
                 .addStoryBoard("hose/dock", HoseScenes::nozzle)
-                .addStoryBoard("hose/pump", HoseScenes::fluid);
+                .addStoryBoard("hose/pump", HoseScenes::fluid)
+                .addStoryBoard("hose/socket", HoseScenes::socket);
 
         helper.forComponents(LoconauticsConstants.id("fluid_hatch_gray"))
+                .addStoryBoard("hose/socket", HoseScenes::socket)
                 .addStoryBoard("hose/dock", HoseScenes::nozzle);
     }
 }

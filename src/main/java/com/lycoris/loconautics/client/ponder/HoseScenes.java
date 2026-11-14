@@ -53,6 +53,11 @@ public class HoseScenes {
     private static final BlockPos TOWER_TANK = new BlockPos(2, 1, 1);
     private static final BlockPos SOCKET = new BlockPos(2, 2, 1);
     private static final BlockPos DOCKED = new BlockPos(2, 3, 1);
+    private static final BlockPos SOCKET_MOUNT = new BlockPos(2, 1, 2);
+    private static final BlockPos SOCKET_ALONE = new BlockPos(2, 2, 2);
+    private static final BlockPos NOZZLE_ALONE = new BlockPos(2, 3, 2);
+    private static final BlockPos SCAFFOLD = new BlockPos(1, 1, 2);
+    private static final BlockPos LEVER = new BlockPos(1, 2, 2);
     private static final Vec3 END_LOOSE_SIDE = new Vec3(3.5, 1.5, 0.5);
     private static final Vec3 END_DOCKED = new Vec3(2.5, 2.6875, 1.5);
     private static final int HOSE_LEAD_TICKS = 1;
@@ -398,6 +403,77 @@ public class HoseScenes {
                 .attachKeyFrame()
                 .placeNearTarget()
                 .pointAt(util.vector().topOf(F_LOOSE));
+        scene.idle(70);
+    }
+
+    public static void socket(SceneBuilder builder, SceneBuildingUtil util) {
+        CreateSceneBuilder scene = open(builder, "nozzle_socket", "Docking Nozzles in Nozzle Sockets");
+
+        scene.world().showSection(util.select().position(SOCKET_MOUNT), Direction.DOWN);
+        scene.idle(5);
+        scene.world().showSection(util.select().position(SOCKET_ALONE), Direction.DOWN);
+        scene.idle(10);
+        scene.overlay().showText(60)
+                .text("Nozzle Sockets hold a nozzle upright and take its Fluid")
+                .attachKeyFrame()
+                .placeNearTarget()
+                .pointAt(util.vector().topOf(SOCKET_ALONE));
+        scene.idle(70);
+
+        scene.overlay().showControls(util.vector().topOf(SOCKET_ALONE), Pointing.DOWN, 30)
+                .rightClick();
+        scene.idle(10);
+        scene.world().modifyBlock(SOCKET_ALONE, state -> state.setValue(BlockStateProperties.OPEN, true), false);
+        scene.overlay().showText(50)
+                .text("Right click the lid to open it")
+                .attachKeyFrame()
+                .placeNearTarget()
+                .pointAt(util.vector().topOf(SOCKET_ALONE));
+        scene.idle(55);
+
+        ElementLink<WorldSectionElement> nozzle =
+                scene.world().showIndependentSection(util.select().position(NOZZLE_ALONE), Direction.DOWN);
+        scene.idle(15);
+        scene.world().moveSection(nozzle, DOCK_DROP, 12);
+        scene.overlay().showText(60)
+                .text("A nozzle that comes near an open socket docks itself")
+                .attachKeyFrame()
+                .placeNearTarget()
+                .pointAt(util.vector().topOf(SOCKET_ALONE));
+        scene.idle(70);
+
+        scene.overlay().showText(60)
+                .text("Alone, a socket stores Water in its own tank")
+                .placeNearTarget()
+                .pointAt(util.vector().topOf(SOCKET_ALONE));
+        scene.idle(70);
+
+        scene.world().setBlock(SOCKET_MOUNT, AllBlocks.FLUID_TANK.getDefaultState(), true);
+        scene.idle(5);
+        scene.world().modifyBlockEntity(SOCKET_MOUNT, FluidTankBlockEntity.class, be -> be.getTankInventory()
+                .fill(new FluidStack(Fluids.WATER, 8000), FluidAction.EXECUTE));
+        scene.overlay().showText(60)
+                .text("With a Fluid Tank behind it, the Fluid goes there instead")
+                .attachKeyFrame()
+                .placeNearTarget()
+                .pointAt(util.vector().topOf(SOCKET_MOUNT));
+        scene.idle(70);
+
+        scene.world().showSection(util.select().position(SCAFFOLD), Direction.DOWN);
+        scene.idle(5);
+        scene.world().showSection(util.select().position(LEVER), Direction.DOWN);
+        scene.idle(10);
+        scene.overlay().showControls(util.vector().topOf(LEVER), Pointing.DOWN, 30)
+                .rightClick();
+        scene.idle(10);
+        scene.world().toggleRedstonePower(util.select().position(LEVER));
+        scene.effects().indicateRedstone(LEVER);
+        scene.world().moveSection(nozzle, new Vec3(0.0, 1.0, 0.0), 8);
+        scene.overlay().showText(60)
+                .text("A Redstone signal shuts docking and pops the nozzle out")
+                .attachKeyFrame()
+                .placeNearTarget()
+                .pointAt(util.vector().topOf(SOCKET_ALONE));
         scene.idle(70);
     }
 

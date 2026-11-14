@@ -94,9 +94,6 @@
       "path": "data/loconautics/recipe/reset_{color}_analog_controller.json"
     },
     {
-      "path": "data/loconautics/recipe/{color}_analog_controller_with_dye.json"
-    },
-    {
       "path": "data/loconautics/recipe/{color}_buffer_with_dye.json",
       "parent": "black",
       "colors": [
@@ -118,31 +115,6 @@
     },
     {
       "path": "data/loconautics/recipe/{color}_conductors_goggles.json"
-    },
-    {
-      "path": "data/loconautics/recipe/{color}_conductors_hat_from_wool.json",
-      "colors": [
-        "orange",
-        "magenta",
-        "light_blue",
-        "yellow",
-        "lime",
-        "pink",
-        "gray",
-        "light_gray",
-        "cyan",
-        "purple",
-        "blue",
-        "brown",
-        "green",
-        "black"
-      ]
-    },
-    {
-      "path": "data/loconautics/recipe/{color}_conductors_hat_with_dye.json"
-    },
-    {
-      "path": "data/loconautics/recipe/{color}_dashboard_with_dye.json"
     },
     {
       "path": "data/loconautics/recipe/{color}_small_combustion_engine_with_dye.json"

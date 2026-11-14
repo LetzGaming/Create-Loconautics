@@ -9,11 +9,11 @@
       "item": "create:precision_mechanism"
     },
     "B": {
-      "item": "create:iron_sheet"
+      "item": "loconautics:industrial_iron_sheet"
     }
   },
   "result": {
     "id": "loconautics:locomotive_gauge",
-    "count": 1
+    "count": 8
   }
 }

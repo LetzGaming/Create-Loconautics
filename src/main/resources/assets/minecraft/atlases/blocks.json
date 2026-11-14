@@ -29,6 +29,12 @@
       "source": "loconautics:block/buffer/red/buffer",
       "from": "red",
       "target": "loconautics:block/buffer/{color}/buffer"
+    },
+    {
+      "type": "loconautics:palette_swap",
+      "source": "loconautics:block/dashboard/red",
+      "from": "red",
+      "target": "loconautics:block/dashboard/{color}"
     }
   ]
 }

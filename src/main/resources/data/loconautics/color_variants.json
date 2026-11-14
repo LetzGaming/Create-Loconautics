@@ -1,0 +1,273 @@
+{
+  "files": [
+    {
+      "path": "assets/loconautics/blockstates/{color}_analog_controller.json"
+    },
+    {
+      "path": "assets/loconautics/blockstates/{color}_buffer.json"
+    },
+    {
+      "path": "assets/loconautics/blockstates/{color}_dashboard.json"
+    },
+    {
+      "path": "assets/loconautics/blockstates/{color}_small_combustion_engine.json"
+    },
+    {
+      "path": "assets/loconautics/models/block/analogcontroller/{color}/controller.json"
+    },
+    {
+      "path": "assets/loconautics/models/block/buffer/{color}/head.json"
+    },
+    {
+      "path": "assets/loconautics/models/block/buffer/{color}/item.json"
+    },
+    {
+      "path": "assets/loconautics/models/block/buffer/{color}/rod.json"
+    },
+    {
+      "path": "assets/loconautics/models/block/buffer/{color}/sleeve.json"
+    },
+    {
+      "path": "assets/loconautics/models/block/combustion/{color}/engine_back.json"
+    },
+    {
+      "path": "assets/loconautics/models/block/combustion/{color}/engine_front.json"
+    },
+    {
+      "path": "assets/loconautics/models/block/combustion/{color}/engine_middle.json"
+    },
+    {
+      "path": "assets/loconautics/models/block/combustion/{color}/engine_single.json"
+    },
+    {
+      "path": "assets/loconautics/models/block/combustion/{color}/piston.json"
+    },
+    {
+      "path": "assets/loconautics/models/block/dashboard/{color}/block.json"
+    },
+    {
+      "path": "assets/loconautics/models/block/dashboard/{color}/end.json"
+    },
+    {
+      "path": "assets/loconautics/models/block/dashboard/{color}/middle.json"
+    },
+    {
+      "path": "assets/loconautics/models/block/dashboard/{color}/single.json"
+    },
+    {
+      "path": "assets/loconautics/models/block/dashboard/{color}/start.json"
+    },
+    {
+      "path": "assets/loconautics/models/entity/conductors_hat/{color}.json"
+    },
+    {
+      "path": "assets/loconautics/models/item/{color}_analog_controller.json"
+    },
+    {
+      "path": "assets/loconautics/models/item/{color}_buffer.json"
+    },
+    {
+      "path": "assets/loconautics/models/item/{color}_conductors_goggles.json"
+    },
+    {
+      "path": "assets/loconautics/models/item/{color}_conductors_hat.json"
+    },
+    {
+      "path": "assets/loconautics/models/item/{color}_dashboard.json"
+    },
+    {
+      "path": "assets/loconautics/models/item/{color}_small_combustion_engine.json"
+    },
+    {
+      "path": "data/loconautics/loot_table/blocks/{color}_analog_controller.json"
+    },
+    {
+      "path": "data/loconautics/loot_table/blocks/{color}_buffer.json"
+    },
+    {
+      "path": "data/loconautics/loot_table/blocks/{color}_dashboard.json"
+    },
+    {
+      "path": "data/loconautics/loot_table/blocks/{color}_small_combustion_engine.json"
+    },
+    {
+      "path": "data/loconautics/recipe/reset_{color}_analog_controller.json"
+    },
+    {
+      "path": "data/loconautics/recipe/{color}_analog_controller_with_dye.json"
+    },
+    {
+      "path": "data/loconautics/recipe/{color}_buffer_with_dye.json",
+      "parent": "black",
+      "colors": [
+        "white",
+        "orange",
+        "magenta",
+        "light_blue",
+        "yellow",
+        "lime",
+        "pink",
+        "gray",
+        "light_gray",
+        "cyan",
+        "purple",
+        "blue",
+        "brown",
+        "green"
+      ]
+    },
+    {
+      "path": "data/loconautics/recipe/{color}_conductors_goggles.json"
+    },
+    {
+      "path": "data/loconautics/recipe/{color}_conductors_hat_from_wool.json",
+      "colors": [
+        "orange",
+        "magenta",
+        "light_blue",
+        "yellow",
+        "lime",
+        "pink",
+        "gray",
+        "light_gray",
+        "cyan",
+        "purple",
+        "blue",
+        "brown",
+        "green",
+        "black"
+      ]
+    },
+    {
+      "path": "data/loconautics/recipe/{color}_conductors_hat_with_dye.json"
+    },
+    {
+      "path": "data/loconautics/recipe/{color}_dashboard_with_dye.json"
+    },
+    {
+      "path": "data/loconautics/recipe/{color}_small_combustion_engine_with_dye.json"
+    },
+    {
+      "path": "assets/loconautics/blockstates/{color}_ribbed_boiler_body.json"
+    },
+    {
+      "path": "assets/loconautics/models/item/{color}_ribbed_boiler_body.json"
+    },
+    {
+      "path": "data/loconautics/loot_table/blocks/{color}_ribbed_boiler_body.json"
+    },
+    {
+      "path": "assets/loconautics/models/block/boiler/barrel/{color}/ribbed/front.json"
+    },
+    {
+      "path": "assets/loconautics/models/block/boiler/barrel/{color}/ribbed/middle.json"
+    },
+    {
+      "path": "assets/loconautics/models/block/boiler/barrel/{color}/ribbed/back.json"
+    },
+    {
+      "path": "assets/loconautics/blockstates/{color}_paneled_boiler_body.json"
+    },
+    {
+      "path": "assets/loconautics/models/item/{color}_paneled_boiler_body.json"
+    },
+    {
+      "path": "data/loconautics/loot_table/blocks/{color}_paneled_boiler_body.json"
+    },
+    {
+      "path": "assets/loconautics/models/block/boiler/barrel/{color}/paneled/front.json"
+    },
+    {
+      "path": "assets/loconautics/models/block/boiler/barrel/{color}/paneled/middle.json"
+    },
+    {
+      "path": "assets/loconautics/models/block/boiler/barrel/{color}/paneled/back.json"
+    },
+    {
+      "path": "assets/loconautics/blockstates/{color}_plated_boiler_body.json"
+    },
+    {
+      "path": "assets/loconautics/models/item/{color}_plated_boiler_body.json"
+    },
+    {
+      "path": "data/loconautics/loot_table/blocks/{color}_plated_boiler_body.json"
+    },
+    {
+      "path": "assets/loconautics/models/block/boiler/barrel/{color}/plated/front.json"
+    },
+    {
+      "path": "assets/loconautics/models/block/boiler/barrel/{color}/plated/middle.json"
+    },
+    {
+      "path": "assets/loconautics/models/block/boiler/barrel/{color}/plated/back.json"
+    },
+    {
+      "path": "assets/loconautics/blockstates/{color}_framed_boiler_body.json"
+    },
+    {
+      "path": "assets/loconautics/models/item/{color}_framed_boiler_body.json"
+    },
+    {
+      "path": "data/loconautics/loot_table/blocks/{color}_framed_boiler_body.json"
+    },
+    {
+      "path": "assets/loconautics/models/block/boiler/barrel/{color}/framed/front.json"
+    },
+    {
+      "path": "assets/loconautics/models/block/boiler/barrel/{color}/framed/middle.json"
+    },
+    {
+      "path": "assets/loconautics/models/block/boiler/barrel/{color}/framed/back.json"
+    },
+    {
+      "path": "assets/loconautics/blockstates/{color}_slatted_boiler_body.json"
+    },
+    {
+      "path": "assets/loconautics/models/item/{color}_slatted_boiler_body.json"
+    },
+    {
+      "path": "data/loconautics/loot_table/blocks/{color}_slatted_boiler_body.json"
+    },
+    {
+      "path": "assets/loconautics/models/block/boiler/barrel/{color}/slatted/front.json"
+    },
+    {
+      "path": "assets/loconautics/models/block/boiler/barrel/{color}/slatted/middle.json"
+    },
+    {
+      "path": "assets/loconautics/models/block/boiler/barrel/{color}/slatted/back.json"
+    }
+  ],
+  "tags": [
+    {
+      "path": "data/loconautics/tags/block/boiler_body.json",
+      "values": [
+        "loconautics:{color}_ribbed_boiler_body",
+        "loconautics:{color}_paneled_boiler_body",
+        "loconautics:{color}_plated_boiler_body",
+        "loconautics:{color}_framed_boiler_body",
+        "loconautics:{color}_slatted_boiler_body"
+      ]
+    },
+    {
+      "path": "data/minecraft/tags/block/mineable/axe.json",
+      "values": [
+        "loconautics:{color}_ribbed_boiler_body",
+        "loconautics:{color}_paneled_boiler_body",
+        "loconautics:{color}_plated_boiler_body",
+        "loconautics:{color}_framed_boiler_body",
+        "loconautics:{color}_slatted_boiler_body"
+      ]
+    },
+    {
+      "path": "data/minecraft/tags/block/mineable/pickaxe.json",
+      "values": [
+        "loconautics:{color}_ribbed_boiler_body",
+        "loconautics:{color}_paneled_boiler_body",
+        "loconautics:{color}_plated_boiler_body",
+        "loconautics:{color}_framed_boiler_body",
+        "loconautics:{color}_slatted_boiler_body"
+      ]
+    }
+  ]
+}

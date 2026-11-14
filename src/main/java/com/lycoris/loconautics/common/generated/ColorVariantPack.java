@@ -1,9 +1,10 @@
 package com.lycoris.loconautics.common.generated;
 
 import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 import com.lycoris.loconautics.LoconauticsConstants;
-import com.lycoris.loconautics.content.boiler.BoilerBlocks;
 
 import net.minecraft.SharedConstants;
 import net.minecraft.network.chat.Component;
@@ -22,40 +23,49 @@ import net.minecraft.world.item.DyeColor;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.Reader;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-// both sides, only common classes. the client copy serves assets, the server copy serves data.
 public final class ColorVariantPack implements PackResources {
 
-    private static final String SOURCE_COLOR = DyeColor.RED.getSerializedName();
-    private static final Pattern SOURCE_WORD = Pattern.compile("(?<![a-z])" + SOURCE_COLOR + "(?![a-z])");
-    private static final List<String> PIECES = List.of("front", "middle", "back");
-    private static final String[] TAGS = {
-            "data/loconautics/tags/block/boiler_body.json",
-            "data/minecraft/tags/block/mineable/axe.json",
-            "data/minecraft/tags/block/mineable/pickaxe.json"};
+    private static final String RULES_FILE = "/data/loconautics/color_variants.json";
+    private static final String DEFAULT_PARENT = DyeColor.RED.getSerializedName();
+
+    private record FileRule(String path, String parent, List<String> colors) {
+    }
+
+    private record TagRule(String path, List<String> values) {
+    }
+
+    private static List<FileRule> fileRules;
+    private static List<TagRule> tagRules;
 
     private final PackLocationInfo location;
     private final PackType type;
     private final Map<ResourceLocation, byte[]> files = new HashMap<>();
+    private final Set<String> namespaces = new HashSet<>();
 
     private ColorVariantPack(PackLocationInfo location, PackType type) {
         this.location = location;
         this.type = type;
+        loadRules();
         build();
     }
 
     public static Pack create(PackType type) {
         String id = LoconauticsConstants.MOD_ID + "_color_variants_" + (type == PackType.CLIENT_RESOURCES ? "assets" : "data");
         PackLocationInfo info = new PackLocationInfo(id, Component.literal("Loconautics color variants"),
-                PackSource.BUILT_IN, java.util.Optional.empty());
+                PackSource.BUILT_IN, Optional.empty());
         Pack.ResourcesSupplier supplier = new Pack.ResourcesSupplier() {
             @Override
             public PackResources openPrimary(PackLocationInfo ignored) {
@@ -70,56 +80,99 @@ public final class ColorVariantPack implements PackResources {
         return Pack.readMetaAndCreate(info, supplier, type, new PackSelectionConfig(true, Pack.Position.TOP, false));
     }
 
-    private void build() {
-        List<DyeColor> colors = new ArrayList<>(BoilerBlocks.BODY_COLORS);
-        colors.remove(DyeColor.RED);
-        List<String> tagged = new ArrayList<>();
-        for (String kind : BoilerBlocks.BODY_KINDS) {
-            for (DyeColor dye : colors) {
-                String color = dye.getSerializedName();
-                String body = BoilerBlocks.bodyName(dye, kind);
-                tagged.add(LoconauticsConstants.MOD_ID + ":" + body);
-                if (type == PackType.CLIENT_RESOURCES) {
-                    swap("assets/loconautics/blockstates/red_" + kind + "_boiler_body.json",
-                            "assets/loconautics/blockstates/" + body + ".json", color);
-                    swap("assets/loconautics/models/item/red_" + kind + "_boiler_body.json",
-                            "assets/loconautics/models/item/" + body + ".json", color);
-                    for (String piece : PIECES) {
-                        swap("assets/loconautics/models/block/boiler/barrel/red/" + kind + "/" + piece + ".json",
-                                "assets/loconautics/models/block/boiler/barrel/" + color + "/" + kind + "/" + piece + ".json", color);
+    private static synchronized void loadRules() {
+        if (fileRules != null) {
+            return;
+        }
+        List<FileRule> loadedFiles = new ArrayList<>();
+        List<TagRule> loadedTags = new ArrayList<>();
+        try (InputStream in = ColorVariantPack.class.getResourceAsStream(RULES_FILE)) {
+            if (in == null) {
+                LoconauticsConstants.LOGGER.error("[ColorPack] missing {}", RULES_FILE);
+            } else {
+                try (Reader reader = new InputStreamReader(in, StandardCharsets.UTF_8)) {
+                    JsonObject root = JsonParser.parseReader(reader).getAsJsonObject();
+                    for (JsonElement element : root.getAsJsonArray("files")) {
+                        JsonObject rule = element.getAsJsonObject();
+                        String parent = rule.has("parent") ? rule.get("parent").getAsString() : DEFAULT_PARENT;
+                        loadedFiles.add(new FileRule(rule.get("path").getAsString(), parent,
+                                rule.has("colors") ? strings(rule.getAsJsonArray("colors")) : otherColors(parent)));
                     }
-                } else {
-                    swap("data/loconautics/loot_table/blocks/red_" + kind + "_boiler_body.json",
-                            "data/loconautics/loot_table/blocks/" + body + ".json", color);
+                    for (JsonElement element : root.getAsJsonArray("tags")) {
+                        JsonObject rule = element.getAsJsonObject();
+                        loadedTags.add(new TagRule(rule.get("path").getAsString(), strings(rule.getAsJsonArray("values"))));
+                    }
                 }
             }
+        } catch (IOException | RuntimeException e) {
+            LoconauticsConstants.LOGGER.error("[ColorPack] cannot read {}", RULES_FILE, e);
         }
-        if (type == PackType.SERVER_DATA) {
-            for (String tag : TAGS) {
-                JsonArray values = new JsonArray();
-                tagged.forEach(values::add);
-                JsonObject root = new JsonObject();
-                root.add("values", values);
-                put(tag, root.toString());
+        fileRules = loadedFiles;
+        tagRules = loadedTags;
+    }
+
+    private static List<String> strings(JsonArray array) {
+        List<String> out = new ArrayList<>();
+        array.forEach(element -> out.add(element.getAsString()));
+        return out;
+    }
+
+    private static List<String> otherColors(String parent) {
+        List<String> out = new ArrayList<>();
+        for (DyeColor dye : DyeColor.values()) {
+            if (!dye.getSerializedName().equals(parent)) {
+                out.add(dye.getSerializedName());
             }
+        }
+        return out;
+    }
+
+    private void build() {
+        String side = type == PackType.CLIENT_RESOURCES ? "assets/" : "data/";
+        for (FileRule rule : fileRules) {
+            if (!rule.path().startsWith(side)) {
+                continue;
+            }
+            String template = readTemplate(rule.path().replace("{color}", rule.parent()));
+            if (template == null) {
+                continue;
+            }
+            Pattern parentWord = Pattern.compile("(?<![a-z])" + rule.parent() + "(?![a-z])");
+            for (String color : rule.colors()) {
+                put(rule.path().replace("{color}", color),
+                        parentWord.matcher(template).replaceAll(Matcher.quoteReplacement(color)));
+            }
+        }
+        if (type != PackType.SERVER_DATA) {
+            return;
+        }
+        for (TagRule rule : tagRules) {
+            JsonArray values = new JsonArray();
+            for (String color : otherColors(DEFAULT_PARENT)) {
+                rule.values().forEach(value -> values.add(value.replace("{color}", color)));
+            }
+            JsonObject root = new JsonObject();
+            root.add("values", values);
+            put(rule.path(), root.toString());
         }
     }
 
-    private void swap(String templatePath, String outPath, String color) {
-        try (InputStream in = ColorVariantPack.class.getResourceAsStream("/" + templatePath)) {
+    private static String readTemplate(String path) {
+        try (InputStream in = ColorVariantPack.class.getResourceAsStream("/" + path)) {
             if (in == null) {
-                LoconauticsConstants.LOGGER.error("[ColorPack] missing template {}", templatePath);
-                return;
+                LoconauticsConstants.LOGGER.error("[ColorPack] missing template {}", path);
+                return null;
             }
-            String text = new String(in.readAllBytes(), StandardCharsets.UTF_8);
-            put(outPath, SOURCE_WORD.matcher(text).replaceAll(Matcher.quoteReplacement(color)));
+            return new String(in.readAllBytes(), StandardCharsets.UTF_8);
         } catch (IOException e) {
-            LoconauticsConstants.LOGGER.error("[ColorPack] cannot read template {}", templatePath, e);
+            LoconauticsConstants.LOGGER.error("[ColorPack] cannot read template {}", path, e);
+            return null;
         }
     }
 
     private void put(String path, String text) {
         String[] parts = path.split("/", 3);
+        namespaces.add(parts[1]);
         files.put(ResourceLocation.fromNamespaceAndPath(parts[1], parts[2]), text.getBytes(StandardCharsets.UTF_8));
     }
 
@@ -150,7 +203,7 @@ public final class ColorVariantPack implements PackResources {
 
     @Override
     public Set<String> getNamespaces(PackType requested) {
-        return requested == type ? Set.of(LoconauticsConstants.MOD_ID, "minecraft") : Set.of();
+        return requested == type ? Set.copyOf(namespaces) : Set.of();
     }
 
     @SuppressWarnings("unchecked")
@@ -159,7 +212,7 @@ public final class ColorVariantPack implements PackResources {
         if (!serializer.getMetadataSectionName().equals(PackMetadataSection.TYPE.getMetadataSectionName())) {
             return null;
         }
-        return (T) new PackMetadataSection(Component.literal("Generated boiler body colors"),
+        return (T) new PackMetadataSection(Component.literal("Generated color variants"),
                 SharedConstants.getCurrentVersion().getPackVersion(type));
     }
 

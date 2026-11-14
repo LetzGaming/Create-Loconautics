@@ -57,8 +57,8 @@ public record ValvePart(float degrees, @Nullable BlockPos safetyValve, int wheel
     }
 
     @Override
-    public PanelPart relocated(Level level, BlockPos shift) {
-        return new ValvePart(degrees, PanelPart.followMoved(level, safetyValve, shift), wheelColor);
+    public PanelPart relocated(Level level, BlockPos shift, boolean copied) {
+        return new ValvePart(degrees, PanelPart.follow(level, safetyValve, shift, copied), wheelColor);
     }
 
     @Override

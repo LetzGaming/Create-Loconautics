@@ -59,8 +59,8 @@ public record LeverPart(int power, @Nullable BlockPos link, int body, int knobCo
     }
 
     @Override
-    public PanelPart relocated(Level level, BlockPos shift) {
-        return new LeverPart(power, PanelPart.followMoved(level, link, shift), body, knobColor, style, options);
+    public PanelPart relocated(Level level, BlockPos shift, boolean copied) {
+        return new LeverPart(power, PanelPart.follow(level, link, shift, copied), body, knobColor, style, options);
     }
 
     @Override

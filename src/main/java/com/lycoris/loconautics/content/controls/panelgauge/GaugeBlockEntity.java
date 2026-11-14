@@ -53,9 +53,9 @@ public class GaugeBlockEntity extends PanelBlockEntity {
         }
 
         @Override
-        public PanelPart relocated(Level level, BlockPos shift) {
+        public PanelPart relocated(Level level, BlockPos shift, boolean copied) {
             if (!bound()) return this;
-            return new Gauge(PanelPart.followMoved(level, firebox, shift), metric, background, front, needleColor, options);
+            return new Gauge(PanelPart.follow(level, firebox, shift, copied), metric, background, front, needleColor, options);
         }
 
         @Override

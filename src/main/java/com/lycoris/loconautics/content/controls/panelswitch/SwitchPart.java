@@ -67,8 +67,8 @@ public record SwitchPart(int power, @Nullable BlockPos link, int body, int knobC
     }
 
     @Override
-    public PanelPart relocated(Level level, BlockPos shift) {
-        return new SwitchPart(power, PanelPart.followMoved(level, link, shift), body, knobColor, style, options);
+    public PanelPart relocated(Level level, BlockPos shift, boolean copied) {
+        return new SwitchPart(power, PanelPart.follow(level, link, shift, copied), body, knobColor, style, options);
     }
 
     @Override

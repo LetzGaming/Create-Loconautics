@@ -26,6 +26,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.EnumMap;
 import java.util.EnumSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -91,8 +92,31 @@ public class PanelBlockEntity extends SmartBlockEntity implements IHaveGoggleInf
         for (PanelSlot slot : PanelSlot.values()) {
             PanelPart part = parts.get(slot);
             if (part == null) continue;
-            PanelPart moved = part.relocated(level, shift);
+            PanelPart moved = part.relocated(level, shift, false);
             if (!moved.equals(part)) replacePart(slot, moved);
+        }
+    }
+
+    private void followCopiedParts() {
+        schematicTicks++;
+        if (schematicTicks % COPY_RETRY_TICKS != 0) return;
+        Iterator<Map.Entry<PanelSlot, PanelPart>> it = pendingCopies.entrySet().iterator();
+        while (it.hasNext()) {
+            Map.Entry<PanelSlot, PanelPart> entry = it.next();
+            PanelPart now = parts.get(entry.getKey());
+            PanelPart original = entry.getValue();
+            if (now == null || !now.equals(original)) {
+                it.remove();
+                continue;
+            }
+            PanelPart moved = original.relocated(level, schematicShift, true);
+            if (moved.equals(original)) continue;
+            replacePart(entry.getKey(), moved);
+            it.remove();
+        }
+        if (pendingCopies.isEmpty() || schematicTicks > COPY_WINDOW_TICKS) {
+            pendingCopies.clear();
+            schematicShift = null;
         }
     }
 
@@ -101,6 +125,7 @@ public class PanelBlockEntity extends SmartBlockEntity implements IHaveGoggleInf
         super.tick();
         boolean server = level != null && !level.isClientSide;
         if (server && assemblyShift != null) relocateParts();
+        if (server && schematicShift != null) followCopiedParts();
         for (PanelSlot slot : PanelSlot.values()) {
             PanelPart part = parts.get(slot);
             if (part == null) continue;
@@ -283,6 +308,18 @@ public class PanelBlockEntity extends SmartBlockEntity implements IHaveGoggleInf
 
     @Nullable private BlockPos assemblyShift;
 
+    private static final String ORIGIN_TAG = "SchematicOrigin";
+
+    private static final int COPY_RETRY_TICKS = 10;
+
+    private static final int COPY_WINDOW_TICKS = 1200;
+
+    @Nullable private BlockPos schematicShift;
+
+    private final Map<PanelSlot, PanelPart> pendingCopies = new EnumMap<>(PanelSlot.class);
+
+    private int schematicTicks;
+
     private boolean centered;
 
     public boolean isCentered() {
@@ -437,6 +474,7 @@ public class PanelBlockEntity extends SmartBlockEntity implements IHaveGoggleInf
     @Override
     public void writeSafe(CompoundTag tag, HolderLookup.Provider registries) {
         write(tag, registries, false);
+        tag.putLong(ORIGIN_TAG, worldPosition.asLong());
     }
 
     @Override
@@ -525,6 +563,17 @@ public class PanelBlockEntity extends SmartBlockEntity implements IHaveGoggleInf
             if (!names.contains(key) || !parts.containsKey(slot)) continue;
             Component label = Component.Serializer.fromJson(names.getString(key), registries);
             if (label != null) labels.put(slot, label);
+        }
+
+        pendingCopies.clear();
+        schematicShift = null;
+        schematicTicks = 0;
+        if (!clientPacket && tag.contains(ORIGIN_TAG)) {
+            BlockPos shift = worldPosition.subtract(BlockPos.of(tag.getLong(ORIGIN_TAG)));
+            if (!shift.equals(BlockPos.ZERO)) {
+                schematicShift = shift;
+                pendingCopies.putAll(parts);
+            }
         }
 
         dropAllTransmitters();

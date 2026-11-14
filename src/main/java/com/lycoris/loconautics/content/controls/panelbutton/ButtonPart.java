@@ -65,8 +65,8 @@ public record ButtonPart(long pressedUntil, @Nullable BlockPos link,
     }
 
     @Override
-    public PanelPart relocated(Level level, BlockPos shift) {
-        return new ButtonPart(pressedUntil, PanelPart.followMoved(level, link, shift), body, capColor, style, options);
+    public PanelPart relocated(Level level, BlockPos shift, boolean copied) {
+        return new ButtonPart(pressedUntil, PanelPart.follow(level, link, shift, copied), body, capColor, style, options);
     }
 
     @Override

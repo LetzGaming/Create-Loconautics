@@ -67,7 +67,7 @@ public interface PanelPart {
     default void addToGoggleTooltip(PanelBlockEntity panel, List<Component> tooltip) {
     }
 
-    default PanelPart relocated(Level level, BlockPos shift) {
+    default PanelPart relocated(Level level, BlockPos shift, boolean copied) {
         return this;
     }
 
@@ -75,6 +75,16 @@ public interface PanelPart {
     static BlockPos followMoved(Level level, @Nullable BlockPos target, BlockPos shift) {
         if (target == null || !level.isLoaded(target) || !level.getBlockState(target).isAir()) return target;
         return target.offset(shift);
+    }
+
+    @Nullable
+    static BlockPos follow(Level level, @Nullable BlockPos target, BlockPos shift, boolean copied) {
+        if (target == null || !copied) return followMoved(level, target, shift);
+        BlockPos shifted = target.offset(shift);
+        if (!level.isLoaded(shifted) || level.getBlockState(shifted).isAir()) return target;
+        if (level.isLoaded(target) && !level.getBlockState(target).isAir()
+                && level.getBlockState(target).getBlock() != level.getBlockState(shifted).getBlock()) return target;
+        return shifted;
     }
 
     static void addDisconnected(List<Component> tooltip) {

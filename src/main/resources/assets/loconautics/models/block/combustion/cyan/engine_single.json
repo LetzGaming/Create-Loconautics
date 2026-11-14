@@ -1,8 +1,0 @@
-{
-  "parent": "loconautics:block/combustion/engine_single",
-  "render_type": "minecraft:cutout",
-  "textures": {
-    "0": "loconautics:block/combustion/cyan/engine",
-    "particle": "loconautics:block/combustion/cyan/engine"
-  }
-}

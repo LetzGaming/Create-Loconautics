@@ -35,6 +35,12 @@
       "source": "loconautics:block/dashboard/red",
       "from": "red",
       "target": "loconautics:block/dashboard/{color}"
+    },
+    {
+      "type": "loconautics:palette_swap",
+      "source": "loconautics:item/conductors_hat/red",
+      "from": "red",
+      "target": "loconautics:item/conductors_hat/{color}"
     }
   ]
 }

@@ -17,15 +17,18 @@ public class HosePonderPlugin implements PonderPlugin {
     @Override
     public void registerScenes(PonderSceneRegistrationHelper<ResourceLocation> helper) {
         helper.forComponents(LoconauticsRegistries.HOSE.getId())
-                .addStoryBoard("hose/winch", HoseScenes::connect);
+                .addStoryBoard("hose/winch", HoseScenes::connect)
+                .addStoryBoard("hose/pump", HoseScenes::fluid);
 
         helper.forComponents(LoconauticsRegistries.HOSE_WINCH.getId())
                 .addStoryBoard("hose/winch", HoseScenes::connect)
                 .addStoryBoard("hose/winch", HoseScenes::winch)
-                .addStoryBoard("hose/winch", HoseScenes::freeSpin);
+                .addStoryBoard("hose/winch", HoseScenes::freeSpin)
+                .addStoryBoard("hose/pump", HoseScenes::fluid);
 
         helper.forComponents(LoconauticsRegistries.HOSE_NOZZLE.getId())
-                .addStoryBoard("hose/dock", HoseScenes::nozzle);
+                .addStoryBoard("hose/dock", HoseScenes::nozzle)
+                .addStoryBoard("hose/pump", HoseScenes::fluid);
 
         helper.forComponents(LoconauticsConstants.id("fluid_hatch_gray"))
                 .addStoryBoard("hose/dock", HoseScenes::nozzle);

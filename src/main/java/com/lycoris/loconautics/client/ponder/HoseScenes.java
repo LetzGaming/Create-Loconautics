@@ -39,8 +39,17 @@ public class HoseScenes {
     private static final Vec3 END_STAND_NEAR = new Vec3(2.5, 1.5, 1.5);
     private static final Vec3 END_STAND_HALF = new Vec3(2.5, 1.5, 1.0);
     private static final Vec3 END_STAND_OUT = new Vec3(2.5, 1.5, 0.5);
+    private static final BlockPos F_LOOSE = new BlockPos(4, 1, 1);
+    private static final Vec3 END_F_LOOSE = new Vec3(4.5, 1.5, 1.5);
+    private static final Vec3 PULL_OUT_F = new Vec3(2.0, -1.1875, 0.0);
     private static final BlockPos WINCH_MOUNT = new BlockPos(2, 1, 4);
     private static final BlockPos WINCH = new BlockPos(2, 2, 4);
+    private static final BlockPos PUMP = new BlockPos(2, 3, 4);
+    private static final BlockPos SOURCE = new BlockPos(2, 4, 4);
+    private static final BlockPos PUMP_COG = new BlockPos(3, 3, 4);
+    private static final BlockPos PUMP_SHAFT_NEAR = new BlockPos(3, 2, 4);
+    private static final BlockPos PUMP_SHAFT_FAR = new BlockPos(3, 1, 4);
+    private static final BlockPos PUMP_SHAFT_BASE = new BlockPos(3, 0, 4);
     private static final BlockPos TOWER_TANK = new BlockPos(2, 1, 1);
     private static final BlockPos SOCKET = new BlockPos(2, 2, 1);
     private static final BlockPos DOCKED = new BlockPos(2, 3, 1);
@@ -50,6 +59,7 @@ public class HoseScenes {
     private static final float SLOW_RPM = 8.0f;
     private static final float FAST_RPM = 24.0f;
     private static final float FREE_RPM = 32.0f;
+    private static final Vec3 DOCK_DROP = new Vec3(0.0, -0.8125, 0.0);
     private static final Vec3 PULL_OUT = new Vec3(1.0, -1.1875, -1.0);
     private static final Vec3 PUSH_IN = new Vec3(-1.0, 1.1875, 1.0);
 
@@ -301,6 +311,103 @@ public class HoseScenes {
                 .pointAt(util.vector().topOf(SOCKET));
         drag(scene, nozzle, PULL_OUT, WINCH, END_DOCKED, END_LOOSE_SIDE, 0.0f, 20);
         scene.idle(50);
+    }
+
+    public static void fluid(SceneBuilder builder, SceneBuildingUtil util) {
+        CreateSceneBuilder scene = open(builder, "hose_fluid", "Pumping Fluids through Hoses", PUMP_SHAFT_BASE);
+        Selection pump = util.select().position(PUMP);
+        Selection drive = driveOf(util);
+
+        scene.world().showSection(util.select().position(WINCH_MOUNT), Direction.DOWN);
+        scene.idle(5);
+        hosed(scene, WINCH);
+        scene.world().showSection(util.select().position(WINCH), Direction.DOWN);
+        scene.idle(5);
+        scene.world().modifyBlock(SOCKET, state -> state.setValue(BlockStateProperties.OPEN, true), false);
+        scene.world().showSection(util.select().fromTo(TOWER_TANK, SOCKET), Direction.DOWN);
+        scene.idle(8);
+        ElementLink<WorldSectionElement> nozzle =
+                scene.world().showIndependentSection(util.select().position(DOCKED), Direction.DOWN);
+        scene.world().moveSection(nozzle, DOCK_DROP, 0);
+        scene.idle(8);
+        hose(scene, WINCH, END_DOCKED, 0.0f);
+        scene.world().showSection(pump, Direction.DOWN);
+        scene.idle(5);
+        scene.world().showSection(util.select().position(SOURCE), Direction.DOWN);
+        scene.idle(5);
+        scene.world().modifyBlockEntity(SOURCE, FluidTankBlockEntity.class, be -> be.getTankInventory()
+                .fill(new FluidStack(Fluids.WATER, 24000), FluidAction.EXECUTE));
+        scene.idle(10);
+        scene.overlay().showText(60)
+                .text("Hoses need a Mechanical Pump on the face opposite the mount")
+                .attachKeyFrame()
+                .placeNearTarget()
+                .pointAt(util.vector().topOf(PUMP));
+        scene.idle(70);
+
+        scene.world().showSection(util.select().position(PUMP_COG), Direction.DOWN);
+        scene.idle(5);
+        scene.world().restoreBlocks(util.select().position(PUMP_SHAFT_BASE));
+        scene.world().showSection(util.select().fromTo(PUMP_SHAFT_NEAR, PUMP_SHAFT_FAR), Direction.DOWN);
+        scene.idle(15);
+        pumpSpeed(scene, pump, drive, 64.0f);
+        scene.world().propagatePipeChange(PUMP);
+        scene.effects().rotationSpeedIndicator(PUMP_COG);
+        scene.overlay().showText(60)
+                .text("Pump speed sets how far the pressure reaches...")
+                .attachKeyFrame()
+                .placeNearTarget()
+                .pointAt(util.vector().centerOf(PUMP_COG));
+        scene.idle(70);
+
+        scene.overlay().showText(60)
+                .text("...a hose only works once the pressure covers its whole length")
+                .placeNearTarget()
+                .pointAt(util.vector().topOf(WINCH));
+        scene.idle(70);
+
+        scene.overlay().showOutline(PonderPalette.GREEN, "socket", util.select().position(SOCKET), 70);
+        scene.world().modifyBlockEntity(TOWER_TANK, FluidTankBlockEntity.class, be -> be.getTankInventory()
+                .fill(new FluidStack(Fluids.WATER, 8000), FluidAction.EXECUTE));
+        scene.overlay().showText(60)
+                .text("Docked in a Nozzle Socket, everything pumped goes into it")
+                .attachKeyFrame()
+                .placeNearTarget()
+                .pointAt(util.vector().topOf(SOCKET));
+        scene.idle(70);
+
+        pumpSpeed(scene, pump, drive, -64.0f);
+        scene.world().propagatePipeChange(PUMP);
+        scene.effects().rotationDirectionIndicator(PUMP_COG);
+        scene.overlay().showText(60)
+                .text("A reversed pump pulls Fluid back out through the hose")
+                .attachKeyFrame()
+                .placeNearTarget()
+                .pointAt(util.vector().topOf(PUMP));
+        scene.idle(70);
+
+        pumpSpeed(scene, pump, drive, 64.0f);
+        scene.world().propagatePipeChange(PUMP);
+        scene.world().modifyBlock(DOCKED, state -> state.setValue(BlockStateProperties.POWERED, false), false);
+        drag(scene, nozzle, PULL_OUT_F, WINCH, END_DOCKED, END_F_LOOSE, 0.0f, 20);
+        scene.effects().emitParticles(new Vec3(4.5, 1.2, 1.5),
+                scene.effects().simpleParticleEmitter(ParticleTypes.FALLING_WATER, new Vec3(0.0, -0.15, 0.0)),
+                3.0f, 40);
+        scene.overlay().showText(60)
+                .text("A loose nozzle sprays what is pumped, and the jet pushes it back")
+                .attachKeyFrame()
+                .placeNearTarget()
+                .pointAt(util.vector().topOf(F_LOOSE));
+        scene.idle(70);
+    }
+
+    private static Selection driveOf(SceneBuildingUtil util) {
+        return util.select().position(PUMP_COG).add(util.select().fromTo(PUMP_SHAFT_BASE, PUMP_SHAFT_NEAR));
+    }
+
+    private static void pumpSpeed(CreateSceneBuilder scene, Selection pump, Selection drive, float speed) {
+        scene.world().setKineticSpeed(pump, speed);
+        scene.world().setKineticSpeed(drive, -speed);
     }
 
     private static void showDrive(CreateSceneBuilder scene, SceneBuildingUtil util) {

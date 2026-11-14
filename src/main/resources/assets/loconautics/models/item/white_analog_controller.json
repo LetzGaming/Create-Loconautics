@@ -1,8 +1,0 @@
-{
-    "parent": "loconautics:block/analogcontroller/analog_controller_item",
-    "render_type": "cutout_mipped",
-    "textures": {
-        "6": "loconautics:block/analogcontroller/white/body",
-        "particle": "loconautics:block/analogcontroller/white/particle"
-    }
-}

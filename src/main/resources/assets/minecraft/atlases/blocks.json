@@ -23,6 +23,12 @@
       "source": "loconautics:block/analogcontroller/red/particle",
       "from": "red",
       "target": "loconautics:block/analogcontroller/{color}/particle"
+    },
+    {
+      "type": "loconautics:palette_swap",
+      "source": "loconautics:block/buffer/red/buffer",
+      "from": "red",
+      "target": "loconautics:block/buffer/{color}/buffer"
     }
   ]
 }

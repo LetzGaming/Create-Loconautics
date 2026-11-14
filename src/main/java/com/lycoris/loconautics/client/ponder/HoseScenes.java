@@ -39,10 +39,19 @@ public class HoseScenes {
     private static final Vec3 END_STAND_NEAR = new Vec3(2.5, 1.5, 1.5);
     private static final Vec3 END_STAND_HALF = new Vec3(2.5, 1.5, 1.0);
     private static final Vec3 END_STAND_OUT = new Vec3(2.5, 1.5, 0.5);
+    private static final BlockPos WINCH_MOUNT = new BlockPos(2, 1, 4);
+    private static final BlockPos WINCH = new BlockPos(2, 2, 4);
+    private static final BlockPos TOWER_TANK = new BlockPos(2, 1, 1);
+    private static final BlockPos SOCKET = new BlockPos(2, 2, 1);
+    private static final BlockPos DOCKED = new BlockPos(2, 3, 1);
+    private static final Vec3 END_LOOSE_SIDE = new Vec3(3.5, 1.5, 0.5);
+    private static final Vec3 END_DOCKED = new Vec3(2.5, 2.6875, 1.5);
     private static final int HOSE_LEAD_TICKS = 1;
     private static final float SLOW_RPM = 8.0f;
     private static final float FAST_RPM = 24.0f;
     private static final float FREE_RPM = 32.0f;
+    private static final Vec3 PULL_OUT = new Vec3(1.0, -1.1875, -1.0);
+    private static final Vec3 PUSH_IN = new Vec3(-1.0, 1.1875, 1.0);
 
     public static void winch(SceneBuilder builder, SceneBuildingUtil util) {
         CreateSceneBuilder scene = open(builder, "hose_winch", "Reeling Hoses using Hose Winches", STAND_COG_LOW);
@@ -232,6 +241,66 @@ public class HoseScenes {
                 .placeNearTarget()
                 .pointAt(util.vector().topOf(STAND));
         scene.idle(80);
+    }
+
+    public static void nozzle(SceneBuilder builder, SceneBuildingUtil util) {
+        CreateSceneBuilder scene = open(builder, "hose_nozzle", "Handling Hose Nozzles");
+
+        scene.world().showSection(util.select().position(WINCH_MOUNT), Direction.DOWN);
+        scene.idle(5);
+        hosed(scene, WINCH);
+        scene.world().showSection(util.select().position(WINCH), Direction.DOWN);
+        scene.idle(5);
+        scene.world().showSection(util.select().fromTo(TOWER_TANK, SOCKET), Direction.DOWN);
+        scene.idle(10);
+        ElementLink<WorldSectionElement> nozzle =
+                scene.world().showIndependentSection(util.select().position(DOCKED), Direction.DOWN);
+        scene.world().moveSection(nozzle, new Vec3(1.0, -2.0, -1.0), 0);
+        scene.world().modifyBlock(DOCKED, state -> state.setValue(BlockStateProperties.POWERED, false), false);
+        scene.idle(10);
+        hose(scene, WINCH, END_LOOSE_SIDE, 0.0f);
+        scene.idle(10);
+
+        scene.overlay().showControls(util.vector().topOf(new BlockPos(3, 1, 0)), Pointing.DOWN, 40)
+                .rightClick();
+        scene.idle(25);
+        scene.overlay().showText(60)
+                .text("Right click a nozzle with empty hands to hold it")
+                .attachKeyFrame()
+                .placeNearTarget()
+                .pointAt(util.vector().topOf(new BlockPos(3, 1, 0)));
+        scene.idle(70);
+
+        scene.overlay().showText(60)
+                .text("Scrolling pushes it out or pulls it closer")
+                .placeNearTarget()
+                .pointAt(util.vector().topOf(new BlockPos(3, 1, 0)));
+        scene.idle(70);
+
+        scene.overlay().showText(60)
+                .text("Holding the rotate key while moving the mouse turns it")
+                .placeNearTarget()
+                .pointAt(util.vector().topOf(new BlockPos(3, 1, 0)));
+        scene.idle(70);
+
+        scene.world().modifyBlock(DOCKED, state -> state.setValue(BlockStateProperties.POWERED, true), false);
+        scene.overlay().showOutline(PonderPalette.GREEN, "socket", util.select().position(SOCKET), 60);
+        scene.overlay().showText(60)
+                .text("Near an open Nozzle Socket, a nozzle docks itself upright")
+                .attachKeyFrame()
+                .placeNearTarget()
+                .pointAt(util.vector().topOf(SOCKET));
+        drag(scene, nozzle, PUSH_IN, WINCH, END_LOOSE_SIDE, END_DOCKED, 0.0f, 20);
+        scene.idle(50);
+
+        scene.world().modifyBlock(DOCKED, state -> state.setValue(BlockStateProperties.POWERED, false), false);
+        scene.overlay().showText(60)
+                .text("A taut hose pulls a docked nozzle out of its socket")
+                .attachKeyFrame()
+                .placeNearTarget()
+                .pointAt(util.vector().topOf(SOCKET));
+        drag(scene, nozzle, PULL_OUT, WINCH, END_DOCKED, END_LOOSE_SIDE, 0.0f, 20);
+        scene.idle(50);
     }
 
     private static void showDrive(CreateSceneBuilder scene, SceneBuildingUtil util) {

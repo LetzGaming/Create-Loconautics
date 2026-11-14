@@ -59,6 +59,7 @@ public final class LoconauticsClient {
         modBus.addListener(this::onRegisterGuiLayers);
         modBus.addListener(this::onRegisterParticleProviders);
         modBus.addListener(this::onRegisterGeometryLoaders);
+        modBus.addListener(this::onRegisterSpriteSources);
         modBus.addListener(this::onRegisterClientExtensions);
         modBus.addListener(this::onRegisterBlockColors);
         modBus.addListener(this::onAddPackFinders);
@@ -124,6 +125,12 @@ public final class LoconauticsClient {
         event.registerItem(
                 com.lycoris.loconautics.content.casingpicker.BogeyItem.clientExtensions(),
                 LoconauticsRegistries.BOGEY.get());
+    }
+
+    private void onRegisterSpriteSources(
+            net.neoforged.neoforge.client.event.RegisterSpriteSourceTypesEvent event) {
+        event.register(com.lycoris.loconautics.client.paletteswap.PaletteSwapSource.ID,
+                com.lycoris.loconautics.client.paletteswap.PaletteSwapSource.TYPE);
     }
 
     private void onRegisterGeometryLoaders(

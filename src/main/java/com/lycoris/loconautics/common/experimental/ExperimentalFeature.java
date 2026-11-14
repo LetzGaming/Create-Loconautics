@@ -16,15 +16,19 @@ import java.util.Map;
 import java.util.function.Supplier;
 
 public enum ExperimentalFeature {
-    BOILERWORKS("boilerworks", () -> List.of(
-            BoilerBlocks.FIREBOX_ITEM.get(),
-            BoilerBlocks.BOILER_BODY_ITEM.get(),
-            BoilerBlocks.STEAM_TAKEOFF_ITEM.get(),
-            BoilerBlocks.SMART_SAFETY_VALVE_ITEM.get(),
-            BoilerBlocks.FIREBOX_STOCKER_ITEM.get(),
-            LoconauticsRegistries.SMOKESTACK_ITEM.get(),
-            LoconauticsRegistries.BOILER_TUBES.get(),
-            LoconauticsRegistries.VALVE_GEAR.get())),
+    BOILERWORKS("boilerworks", () -> {
+        List<Item> items = new ArrayList<>(List.of(
+                BoilerBlocks.FIREBOX_ITEM.get(),
+                BoilerBlocks.BOILER_BODY_ITEM.get(),
+                BoilerBlocks.STEAM_TAKEOFF_ITEM.get(),
+                BoilerBlocks.SMART_SAFETY_VALVE_ITEM.get(),
+                BoilerBlocks.FIREBOX_STOCKER_ITEM.get(),
+                LoconauticsRegistries.SMOKESTACK_ITEM.get(),
+                LoconauticsRegistries.BOILER_TUBES.get(),
+                LoconauticsRegistries.VALVE_GEAR.get()));
+        items.addAll(BoilerBlocks.dyedBodyItems());
+        return items;
+    }),
     DIESELWORKS("dieselworks", () -> new ArrayList<>(SmallEngineBlocks.ENGINE_ITEMS.values().stream().map(DeferredHolder::get).toList())),
     INDUSTRIAL_FLUIDS("industrialFluids", () -> List.of(
             LoconauticsRegistries.INDUSTRIAL_IRON_SHEET.get(),

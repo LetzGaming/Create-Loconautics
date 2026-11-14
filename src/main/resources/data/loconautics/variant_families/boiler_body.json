@@ -1,0 +1,34 @@
+{
+  "types": [
+    {
+      "name": "ribbed",
+      "colors": {
+        "red": "loconautics:red_ribbed_boiler_body"
+      }
+    },
+    {
+      "name": "paneled",
+      "colors": {
+        "red": "loconautics:red_paneled_boiler_body"
+      }
+    },
+    {
+      "name": "plated",
+      "colors": {
+        "red": "loconautics:red_plated_boiler_body"
+      }
+    },
+    {
+      "name": "framed",
+      "colors": {
+        "red": "loconautics:red_framed_boiler_body"
+      }
+    },
+    {
+      "name": "slatted",
+      "colors": {
+        "red": "loconautics:red_slatted_boiler_body"
+      }
+    }
+  ]
+}

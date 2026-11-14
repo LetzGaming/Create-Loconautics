@@ -8,6 +8,9 @@ import net.createmod.ponder.api.registration.PonderSceneRegistrationHelper;
 import net.minecraft.resources.ResourceLocation;
 import net.neoforged.neoforge.registries.DeferredHolder;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class BoilerPonderPlugin implements PonderPlugin {
 
     @Override
@@ -23,8 +26,7 @@ public class BoilerPonderPlugin implements PonderPlugin {
                 .addStoryBoard("boiler/barrel", BoilerScenes::ratio)
                 .addStoryBoard("boiler/barrel", BoilerScenes::failure);
 
-        helper.forComponents(BoilerBlocks.BOILER_BODY.getId(),
-                        com.lycoris.loconautics.registry.LoconauticsRegistries.SMOKESTACK.getId())
+        helper.forComponents(bodyIds())
                 .addStoryBoard("boiler/barrel", BoilerScenes::assembly)
                 .addStoryBoard("boiler/water", BoilerScenes::water)
                 .addStoryBoard("boiler/barrel", BoilerScenes::ratio)
@@ -54,5 +56,13 @@ public class BoilerPonderPlugin implements PonderPlugin {
 
         helper.forComponents(DashboardBlocks.DASHBOARDS.values().stream().map(DeferredHolder::getId).toList())
                 .addStoryBoard("dashboard/dashboard", DashboardScenes::desk);
+    }
+
+    private static List<ResourceLocation> bodyIds() {
+        List<ResourceLocation> ids = new ArrayList<>();
+        ids.add(BoilerBlocks.BOILER_BODY.getId());
+        ids.add(com.lycoris.loconautics.registry.LoconauticsRegistries.SMOKESTACK.getId());
+        BoilerBlocks.DYED_BODIES.values().forEach(byColor -> byColor.values().forEach(block -> ids.add(block.getId())));
+        return ids;
     }
 }

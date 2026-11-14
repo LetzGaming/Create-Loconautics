@@ -2,6 +2,7 @@ package com.lycoris.loconautics.content.variantpicker.data;
 
 import com.google.gson.JsonObject;
 import com.lycoris.loconautics.content.variantpicker.BlockVariantRegistry;
+import com.lycoris.loconautics.foundation.ColorOrder;
 
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
@@ -21,7 +22,7 @@ public record LoadedVariantFamily(List<Type> types) {
     public static int colorIndex(String name) {
         if (name.equals("colorless")) return BlockVariantRegistry.COLORLESS_INDEX;
         DyeColor dye = DyeColor.byName(name, null);
-        return dye == null ? -1 : dye.getId();
+        return dye == null ? -1 : ColorOrder.indexOf(dye);
     }
 
 

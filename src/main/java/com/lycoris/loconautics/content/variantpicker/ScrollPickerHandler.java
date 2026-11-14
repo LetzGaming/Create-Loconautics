@@ -6,6 +6,7 @@ import com.lycoris.loconautics.content.conductorshat.ConductorsGoggles;
 import com.lycoris.loconautics.content.conductorshat.ConductorsGogglesItem;
 import com.lycoris.loconautics.content.conductorshat.ConductorsHatItem;
 import com.lycoris.loconautics.content.conductorshat.ConductorsHats;
+import com.lycoris.loconautics.foundation.ColorOrder;
 import com.lycoris.loconautics.network.packets.variantpicker.BlockVariantApplyPacket;
 import com.lycoris.loconautics.network.packets.variantpicker.HatColorApplyPacket;
 import com.mojang.blaze3d.platform.InputConstants;
@@ -107,12 +108,12 @@ public final class ScrollPickerHandler {
 
     private static boolean openColors(DyeColor current, Function<DyeColor, Item> itemFor) {
         List<ScrollMenu.Entry> entries = new ArrayList<>();
-        for (DyeColor color : DyeColor.values()) {
+        for (DyeColor color : ColorOrder.ORDER) {
             Item item = itemFor.apply(color);
             entries.add(new ScrollMenu.Entry(new ItemStack(item), item.getDescription()));
         }
-        ScrollMenu menu = new ScrollMenu(entries, current.getId(), idx ->
-                CatnipServices.NETWORK.sendToServer(new HatColorApplyPacket(InteractionHand.MAIN_HAND, idx)),
+        ScrollMenu menu = new ScrollMenu(entries, ColorOrder.indexOf(current), idx ->
+                CatnipServices.NETWORK.sendToServer(new HatColorApplyPacket(InteractionHand.MAIN_HAND, ColorOrder.at(idx).getId())),
                 false, OPEN_KEY.getKey().getValue());
         return ScrollMenuHandler.open(menu);
     }

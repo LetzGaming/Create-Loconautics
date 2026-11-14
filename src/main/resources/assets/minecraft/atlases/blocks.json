@@ -5,6 +5,12 @@
       "source": "loconautics:block/boiler/barrel/red/body_atlas",
       "from": "red",
       "target": "loconautics:block/boiler/barrel/{color}/body_atlas"
+    },
+    {
+      "type": "loconautics:palette_swap",
+      "source": "loconautics:block/combustion/red/engine",
+      "from": "red",
+      "target": "loconautics:block/combustion/{color}/engine"
     }
   ]
 }

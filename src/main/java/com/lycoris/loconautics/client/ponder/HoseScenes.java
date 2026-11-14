@@ -34,11 +34,15 @@ public class HoseScenes {
     private static final BlockPos STAND_COG_MID = new BlockPos(3, 1, 2);
     private static final BlockPos STAND_COG_LOW = new BlockPos(3, 0, 2);
     private static final BlockPos STAND_NOZZLE = new BlockPos(2, 1, 0);
+    private static final BlockPos STAND_LEVER_MOUNT = new BlockPos(1, 1, 2);
+    private static final BlockPos STAND_LEVER = new BlockPos(1, 2, 2);
     private static final Vec3 END_STAND_NEAR = new Vec3(2.5, 1.5, 1.5);
+    private static final Vec3 END_STAND_HALF = new Vec3(2.5, 1.5, 1.0);
     private static final Vec3 END_STAND_OUT = new Vec3(2.5, 1.5, 0.5);
     private static final int HOSE_LEAD_TICKS = 1;
     private static final float SLOW_RPM = 8.0f;
     private static final float FAST_RPM = 24.0f;
+    private static final float FREE_RPM = 32.0f;
 
     public static void winch(SceneBuilder builder, SceneBuildingUtil util) {
         CreateSceneBuilder scene = open(builder, "hose_winch", "Reeling Hoses using Hose Winches", STAND_COG_LOW);
@@ -100,6 +104,69 @@ public class HoseScenes {
                 .placeNearTarget()
                 .pointAt(util.vector().topOf(STAND));
         scene.idle(80);
+    }
+
+    public static void freeSpin(SceneBuilder builder, SceneBuildingUtil util) {
+        CreateSceneBuilder scene = open(builder, "hose_winch_free", "Letting Hose Winches spin freely", STAND_COG_LOW);
+
+        scene.world().showSection(util.select().position(STAND_MOUNT), Direction.DOWN);
+        scene.idle(5);
+        hosed(scene, STAND);
+        scene.world().showSection(util.select().position(STAND), Direction.DOWN);
+        scene.idle(5);
+        showDrive(scene, util);
+        ElementLink<WorldSectionElement> nozzle =
+                scene.world().showIndependentSection(util.select().position(STAND_NOZZLE), Direction.DOWN);
+        scene.world().moveSection(nozzle, new Vec3(0.0, 0.0, 1.0), 0);
+        scene.idle(8);
+        hose(scene, STAND, END_STAND_NEAR, 0.0f);
+        scene.idle(10);
+        scene.overlay().showText(70)
+                .text("An unpowered Hose Winch only reels while Rotational Force drives it")
+                .attachKeyFrame()
+                .placeNearTarget()
+                .pointAt(util.vector().topOf(STAND));
+        scene.idle(80);
+
+        scene.world().showSection(util.select().position(STAND_LEVER_MOUNT), Direction.DOWN);
+        scene.idle(5);
+        scene.world().showSection(util.select().position(STAND_LEVER), Direction.DOWN);
+        scene.idle(10);
+        scene.overlay().showControls(util.vector().topOf(STAND_LEVER), Pointing.DOWN, 30)
+                .rightClick();
+        scene.idle(10);
+        scene.world().toggleRedstonePower(util.select().position(STAND_LEVER));
+        scene.world().modifyBlock(STAND, state -> state.setValue(BlockStateProperties.POWERED, true), false);
+        scene.effects().indicateRedstone(STAND_LEVER);
+        scene.idle(10);
+        setSpin(scene, util, FREE_RPM);
+        scene.effects().rotationSpeedIndicator(STAND_REEL_NEAR);
+        scene.overlay().showText(60)
+                .text("A Redstone signal lets the winch spin free and pay out hose as it is pulled")
+                .attachKeyFrame()
+                .placeNearTarget()
+                .pointAt(util.vector().topOf(STAND));
+        drag(scene, nozzle, new Vec3(0.0, 0.0, -0.5), STAND, END_STAND_NEAR, END_STAND_HALF, FREE_RPM, 60);
+        scene.idle(5);
+
+        scene.overlay().showText(60)
+                .text("While paying out, the winch turns its shaft and generates Rotational Force")
+                .attachKeyFrame()
+                .placeNearTarget()
+                .pointAt(util.vector().topOf(STAND_REEL_NEAR));
+        drag(scene, nozzle, new Vec3(0.0, 0.0, -0.5), STAND, END_STAND_HALF, END_STAND_OUT, FREE_RPM, 60);
+        scene.idle(5);
+
+        setSpin(scene, util, -SLOW_RPM);
+        scene.effects().rotationDirectionIndicator(STAND_REEL_NEAR);
+        scene.overlay().showText(60)
+                .text("Reeling the hose back in still takes Rotational Force")
+                .attachKeyFrame()
+                .placeNearTarget()
+                .pointAt(util.vector().topOf(STAND));
+        drag(scene, nozzle, new Vec3(0.0, 0.0, 1.0), STAND, END_STAND_OUT, END_STAND_NEAR, -SLOW_RPM, 60);
+        setSpin(scene, util, 0.0f);
+        scene.idle(15);
     }
 
     private static void showDrive(CreateSceneBuilder scene, SceneBuildingUtil util) {

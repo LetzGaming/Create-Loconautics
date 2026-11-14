@@ -52,18 +52,37 @@ public final class ScrollPickerHandler {
         BlockVariantRegistry.Location loc = BlockVariantRegistry.locate(held);
         if (loc == null) return false;
         List<BlockVariantRegistry.VariantType> types = BlockVariantRegistry.family(loc.family());
-        if (types.size() < 2) return false;
+        BlockVariantRegistry.VariantType current = types.get(loc.type());
 
         List<Block> blocks = new ArrayList<>();
-        List<ScrollMenu.Entry> entries = new ArrayList<>();
-        for (BlockVariantRegistry.VariantType type : types) {
-            Block b = blockAt(type, loc);
+        int selected = loc.color();
+        for (int color = 0; color < BlockVariantRegistry.COLOR_COUNT; color++) {
+            Block b = blockAt(current, color, loc.material());
+            if (b == null) continue;
+            if (color == loc.color()) selected = blocks.size();
             blocks.add(b);
-            Component name = b != null ? b.getName() : Component.translatable(type.translationKey());
+        }
+        if (blocks.size() < 2) {
+            blocks.clear();
+            for (BlockVariantRegistry.VariantType type : types) {
+                blocks.add(blockAt(type, loc.color(), loc.material()));
+            }
+            selected = loc.type();
+        }
+        if (blocks.size() < 2) return false;
+        return openBlocks(blocks, selected, types);
+    }
+
+    private static boolean openBlocks(List<Block> blocks, int selected,
+                                      List<BlockVariantRegistry.VariantType> types) {
+        List<ScrollMenu.Entry> entries = new ArrayList<>();
+        for (int i = 0; i < blocks.size(); i++) {
+            Block b = blocks.get(i);
+            Component name = b != null ? b.getName() : Component.translatable(types.get(i).translationKey());
             entries.add(new ScrollMenu.Entry(b != null ? new ItemStack(b) : ItemStack.EMPTY, name));
         }
 
-        ScrollMenu menu = new ScrollMenu(entries, loc.type(), idx -> {
+        ScrollMenu menu = new ScrollMenu(entries, selected, idx -> {
             Block chosen = blocks.get(idx);
             if (chosen != null) {
                 CatnipServices.NETWORK.sendToServer(new BlockVariantApplyPacket(
@@ -98,11 +117,11 @@ public final class ScrollPickerHandler {
         return ScrollMenuHandler.open(menu);
     }
 
-    private static Block blockAt(BlockVariantRegistry.VariantType type, BlockVariantRegistry.Location loc) {
-        if (loc.material() >= 0) {
-            Block wrapped = type.wrappedAt(loc.color(), loc.material());
+    private static Block blockAt(BlockVariantRegistry.VariantType type, int color, int material) {
+        if (material >= 0) {
+            Block wrapped = type.wrappedAt(color, material);
             if (wrapped != null) return wrapped;
         }
-        return type.at(loc.color());
+        return type.at(color);
     }
 }

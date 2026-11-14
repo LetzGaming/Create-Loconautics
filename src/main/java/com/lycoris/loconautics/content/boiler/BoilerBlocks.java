@@ -82,7 +82,7 @@ public final class BoilerBlocks {
 
     public static final DyeColor BODY_TAB_COLOR = DyeColor.RED;
 
-    public static final String BODY_TAB_KIND = "paneled";
+    public static final String BODY_TAB_KIND = "ribbed";
 
     public static final List<String> BODY_KINDS = List.of("ribbed", "paneled", "plated", "framed", "slatted");
 

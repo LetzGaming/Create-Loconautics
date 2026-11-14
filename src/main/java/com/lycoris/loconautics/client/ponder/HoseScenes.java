@@ -169,6 +169,71 @@ public class HoseScenes {
         scene.idle(15);
     }
 
+    public static void connect(SceneBuilder builder, SceneBuildingUtil util) {
+        CreateSceneBuilder scene = open(builder, "hose_connect", "Running a Hose", STAND_COG_LOW);
+
+        scene.world().showSection(util.select().position(STAND_MOUNT), Direction.DOWN);
+        scene.idle(8);
+        scene.world().showSection(util.select().position(STAND), Direction.DOWN);
+        scene.idle(5);
+        scene.world().showSection(util.select().position(STAND_NOZZLE), Direction.DOWN);
+        scene.idle(12);
+        scene.overlay().showText(60)
+                .text("A Hose joins a Hose Winch to a Hose Nozzle or a Hose Connector")
+                .attachKeyFrame()
+                .placeNearTarget()
+                .pointAt(util.vector().topOf(STAND));
+        scene.idle(70);
+
+        scene.overlay().showControls(util.vector().topOf(STAND), Pointing.DOWN, 40)
+                .rightClick()
+                .withItem(hoseItem());
+        scene.idle(30);
+        scene.overlay().showText(60)
+                .text("Right click the winch with a Hose, then the nozzle")
+                .attachKeyFrame()
+                .placeNearTarget()
+                .pointAt(util.vector().topOf(STAND));
+        scene.idle(70);
+
+        scene.overlay().showLine(PonderPalette.GREEN, util.vector().topOf(STAND), END_STAND_OUT, 70);
+        scene.overlay().showText(60)
+                .text("A line previews the run while one end is selected")
+                .placeNearTarget()
+                .pointAt(util.vector().topOf(STAND_NOZZLE));
+        scene.idle(70);
+
+        scene.overlay().showControls(util.vector().topOf(STAND), Pointing.DOWN, 40)
+                .rightClick()
+                .whileSneaking()
+                .withItem(hoseItem());
+        scene.idle(30);
+        scene.overlay().showText(60)
+                .text("Sneak and Right click to drop the selection")
+                .attachKeyFrame()
+                .placeNearTarget()
+                .pointAt(util.vector().topOf(STAND));
+        scene.idle(70);
+
+        scene.overlay().showControls(util.vector().topOf(STAND), Pointing.DOWN, 25)
+                .rightClick()
+                .withItem(hoseItem());
+        scene.idle(20);
+        scene.overlay().showControls(util.vector().topOf(STAND_NOZZLE), Pointing.DOWN, 25)
+                .rightClick()
+                .withItem(hoseItem());
+        scene.idle(25);
+        hosed(scene, STAND);
+        hose(scene, STAND, END_STAND_OUT, 0.0f);
+        scene.idle(10);
+        scene.overlay().showText(70)
+                .text("A hose can only be paid out up to its maximum length")
+                .attachKeyFrame()
+                .placeNearTarget()
+                .pointAt(util.vector().topOf(STAND));
+        scene.idle(80);
+    }
+
     private static void showDrive(CreateSceneBuilder scene, SceneBuildingUtil util) {
         scene.world().restoreBlocks(util.select().position(STAND_COG_LOW));
         scene.world().showSection(util.select().position(STAND_REEL_NEAR), Direction.EAST);
@@ -192,6 +257,10 @@ public class HoseScenes {
         tag.putBoolean("HasStrand", true);
         scene.world().modifyBlockEntity(winch, HoseWinchBlockEntity.class,
                 be -> be.readClient(tag, be.getLevel().registryAccess()));
+    }
+
+    private static ItemStack hoseItem() {
+        return new ItemStack(LoconauticsRegistries.HOSE.get());
     }
 
     private static void drag(CreateSceneBuilder scene, ElementLink<WorldSectionElement> nozzle, Vec3 delta,

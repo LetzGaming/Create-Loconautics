@@ -16,7 +16,11 @@ public class HosePonderPlugin implements PonderPlugin {
 
     @Override
     public void registerScenes(PonderSceneRegistrationHelper<ResourceLocation> helper) {
+        helper.forComponents(LoconauticsRegistries.HOSE.getId())
+                .addStoryBoard("hose/winch", HoseScenes::connect);
+
         helper.forComponents(LoconauticsRegistries.HOSE_WINCH.getId())
+                .addStoryBoard("hose/winch", HoseScenes::connect)
                 .addStoryBoard("hose/winch", HoseScenes::winch)
                 .addStoryBoard("hose/winch", HoseScenes::freeSpin);
     }

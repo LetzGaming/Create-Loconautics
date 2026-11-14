@@ -86,7 +86,7 @@ public final class BoilerBlocks {
 
     public static final List<String> BODY_KINDS = List.of("ribbed", "paneled", "plated", "framed", "slatted");
 
-    public static final List<DyeColor> BODY_COLORS = List.of(DyeColor.RED);
+    public static final List<DyeColor> BODY_COLORS = List.of(DyeColor.values());
 
     public static final Map<String, Map<DyeColor, DeferredHolder<Block, DyedBoilerBarrelBlock>>> DYED_BODIES =
             registerDyedBodies();

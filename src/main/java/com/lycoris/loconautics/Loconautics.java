@@ -41,6 +41,7 @@ public final class Loconautics {
 
         modEventBus.addListener(this::commonSetup);
         modEventBus.addListener(this::registerCapabilities);
+        modEventBus.addListener(this::onAddPackFinders);
         modEventBus.addListener(
                 com.lycoris.loconautics.trainphysics.state.StationChunkTickets::register);
 
@@ -244,6 +245,12 @@ public final class Loconautics {
         } catch (Throwable t) {
             LoconauticsConstants.LOGGER.error("[shutdown] {} failed to clear, its static state may leak into the next server", name, t);
         }
+    }
+
+    private void onAddPackFinders(net.neoforged.neoforge.event.AddPackFindersEvent event) {
+        net.minecraft.server.packs.PackType type = event.getPackType();
+        event.addRepositorySource(accept -> accept.accept(
+                com.lycoris.loconautics.common.generated.ColorVariantPack.create(type)));
     }
 
     private void onAddReloadListeners(net.neoforged.neoforge.event.AddReloadListenerEvent event) {

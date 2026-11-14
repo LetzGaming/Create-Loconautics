@@ -3,31 +3,106 @@
     {
       "name": "ribbed",
       "colors": {
-        "red": "loconautics:red_ribbed_boiler_body"
+        "white": "loconautics:white_ribbed_boiler_body",
+        "orange": "loconautics:orange_ribbed_boiler_body",
+        "magenta": "loconautics:magenta_ribbed_boiler_body",
+        "light_blue": "loconautics:light_blue_ribbed_boiler_body",
+        "yellow": "loconautics:yellow_ribbed_boiler_body",
+        "lime": "loconautics:lime_ribbed_boiler_body",
+        "pink": "loconautics:pink_ribbed_boiler_body",
+        "gray": "loconautics:gray_ribbed_boiler_body",
+        "light_gray": "loconautics:light_gray_ribbed_boiler_body",
+        "cyan": "loconautics:cyan_ribbed_boiler_body",
+        "purple": "loconautics:purple_ribbed_boiler_body",
+        "blue": "loconautics:blue_ribbed_boiler_body",
+        "brown": "loconautics:brown_ribbed_boiler_body",
+        "green": "loconautics:green_ribbed_boiler_body",
+        "red": "loconautics:red_ribbed_boiler_body",
+        "black": "loconautics:black_ribbed_boiler_body"
       }
     },
     {
       "name": "paneled",
       "colors": {
-        "red": "loconautics:red_paneled_boiler_body"
+        "white": "loconautics:white_paneled_boiler_body",
+        "orange": "loconautics:orange_paneled_boiler_body",
+        "magenta": "loconautics:magenta_paneled_boiler_body",
+        "light_blue": "loconautics:light_blue_paneled_boiler_body",
+        "yellow": "loconautics:yellow_paneled_boiler_body",
+        "lime": "loconautics:lime_paneled_boiler_body",
+        "pink": "loconautics:pink_paneled_boiler_body",
+        "gray": "loconautics:gray_paneled_boiler_body",
+        "light_gray": "loconautics:light_gray_paneled_boiler_body",
+        "cyan": "loconautics:cyan_paneled_boiler_body",
+        "purple": "loconautics:purple_paneled_boiler_body",
+        "blue": "loconautics:blue_paneled_boiler_body",
+        "brown": "loconautics:brown_paneled_boiler_body",
+        "green": "loconautics:green_paneled_boiler_body",
+        "red": "loconautics:red_paneled_boiler_body",
+        "black": "loconautics:black_paneled_boiler_body"
       }
     },
     {
       "name": "plated",
       "colors": {
-        "red": "loconautics:red_plated_boiler_body"
+        "white": "loconautics:white_plated_boiler_body",
+        "orange": "loconautics:orange_plated_boiler_body",
+        "magenta": "loconautics:magenta_plated_boiler_body",
+        "light_blue": "loconautics:light_blue_plated_boiler_body",
+        "yellow": "loconautics:yellow_plated_boiler_body",
+        "lime": "loconautics:lime_plated_boiler_body",
+        "pink": "loconautics:pink_plated_boiler_body",
+        "gray": "loconautics:gray_plated_boiler_body",
+        "light_gray": "loconautics:light_gray_plated_boiler_body",
+        "cyan": "loconautics:cyan_plated_boiler_body",
+        "purple": "loconautics:purple_plated_boiler_body",
+        "blue": "loconautics:blue_plated_boiler_body",
+        "brown": "loconautics:brown_plated_boiler_body",
+        "green": "loconautics:green_plated_boiler_body",
+        "red": "loconautics:red_plated_boiler_body",
+        "black": "loconautics:black_plated_boiler_body"
       }
     },
     {
       "name": "framed",
       "colors": {
-        "red": "loconautics:red_framed_boiler_body"
+        "white": "loconautics:white_framed_boiler_body",
+        "orange": "loconautics:orange_framed_boiler_body",
+        "magenta": "loconautics:magenta_framed_boiler_body",
+        "light_blue": "loconautics:light_blue_framed_boiler_body",
+        "yellow": "loconautics:yellow_framed_boiler_body",
+        "lime": "loconautics:lime_framed_boiler_body",
+        "pink": "loconautics:pink_framed_boiler_body",
+        "gray": "loconautics:gray_framed_boiler_body",
+        "light_gray": "loconautics:light_gray_framed_boiler_body",
+        "cyan": "loconautics:cyan_framed_boiler_body",
+        "purple": "loconautics:purple_framed_boiler_body",
+        "blue": "loconautics:blue_framed_boiler_body",
+        "brown": "loconautics:brown_framed_boiler_body",
+        "green": "loconautics:green_framed_boiler_body",
+        "red": "loconautics:red_framed_boiler_body",
+        "black": "loconautics:black_framed_boiler_body"
       }
     },
     {
       "name": "slatted",
       "colors": {
-        "red": "loconautics:red_slatted_boiler_body"
+        "white": "loconautics:white_slatted_boiler_body",
+        "orange": "loconautics:orange_slatted_boiler_body",
+        "magenta": "loconautics:magenta_slatted_boiler_body",
+        "light_blue": "loconautics:light_blue_slatted_boiler_body",
+        "yellow": "loconautics:yellow_slatted_boiler_body",
+        "lime": "loconautics:lime_slatted_boiler_body",
+        "pink": "loconautics:pink_slatted_boiler_body",
+        "gray": "loconautics:gray_slatted_boiler_body",
+        "light_gray": "loconautics:light_gray_slatted_boiler_body",
+        "cyan": "loconautics:cyan_slatted_boiler_body",
+        "purple": "loconautics:purple_slatted_boiler_body",
+        "blue": "loconautics:blue_slatted_boiler_body",
+        "brown": "loconautics:brown_slatted_boiler_body",
+        "green": "loconautics:green_slatted_boiler_body",
+        "red": "loconautics:red_slatted_boiler_body",
+        "black": "loconautics:black_slatted_boiler_body"
       }
     }
   ]

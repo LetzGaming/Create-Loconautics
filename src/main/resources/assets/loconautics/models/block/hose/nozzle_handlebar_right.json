@@ -1,0 +1,44 @@
+{
+    "parent": "minecraft:block/block",
+    "render_type": "minecraft:cutout",
+    "texture_size": [32, 32],
+    "textures": {
+        "0": "loconautics:block/hose/winch/nozzle",
+        "particle": "loconautics:block/hose/winch/nozzle"
+    },
+    "elements": [
+        {
+            "from": [15.53002, 5.53003, 11.475],
+            "to": [9.58002, 3.53003, 4.525],
+            "rotation": {"angle": 45, "axis": "z", "origin": [10.5, 4.45, 7]},
+            "faces": {
+                "north": {"uv": [7.5, 5, 8.5, 8], "rotation": 90, "texture": "#0"},
+                "south": {"uv": [7.5, 8, 8.5, 5], "rotation": 90, "texture": "#0"},
+                "west": {"uv": [8, 2.5, 11.5, 3.5], "texture": "#0"}
+            }
+        },
+        {
+            "from": [9.48003, 3.43003, 4.475],
+            "to": [15.53003, 5.48003, 11.525],
+            "rotation": {"angle": 45, "axis": "z", "origin": [10.5, 4.45, 7]},
+            "faces": {
+                "north": {"uv": [7.5, 8, 8.5, 5], "rotation": 90, "texture": "#0"},
+                "east": {"uv": [8, 3.5, 11.5, 4.5], "texture": "#0"},
+                "south": {"uv": [7.5, 5, 8.5, 8], "rotation": 90, "texture": "#0"}
+            }
+        },
+        {
+            "from": [14.48003, 4.43003, 4.475],
+            "to": [15.53003, 4.48003, 11.525],
+            "rotation": {"angle": 45, "axis": "z", "origin": [10.5, 4.45, 7]},
+            "faces": {
+                "west": {"uv": [0, 0, 0, 0], "texture": "#0"},
+                "up": {"uv": [12, 6.5, 12.5, 10], "texture": "#0"},
+                "down": {"uv": [12, 6.5, 12.5, 10], "texture": "#0"}
+            }
+        }
+    ],
+    "groups": [
+        {"name": "handlebar_right", "origin": [5.5, 4.45, 7], "scope": 0, "color": 0, "children": [0, 1, 2]}
+    ]
+}

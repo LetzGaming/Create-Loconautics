@@ -50,7 +50,7 @@ Want to add a language or finish one? Copy `src/main/resources/assets/loconautic
 ## Thanks
 
 - Lyc and MDLOP, development
-- Basilforrealss, TugKanTheMan and Hatchet, art
+- Basilforrealss, TugKanDeMan and Hatchet, art
 - ZyxBe, MaxweLi, Bwah, Popochka, GoldenPants, Čipollø and Miat, testing.
 - The Create team, for the trains this is built around.
 - RyanHCode and the Sable team, for the physics.

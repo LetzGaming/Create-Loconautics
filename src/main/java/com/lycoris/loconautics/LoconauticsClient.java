@@ -231,6 +231,11 @@ public final class LoconauticsClient {
                 .apply();
 
         SimpleBlockEntityVisualizer
+                .builder(LoconauticsRegistries.HOSE_NOZZLE_BE.get())
+                .factory(com.lycoris.loconautics.content.hose.nozzle.HoseNozzleVisual::new)
+                .apply();
+
+        SimpleBlockEntityVisualizer
                 .builder(LoconauticsRegistries.TRANSMISSION_BE.get())
                 .factory(SplitShaftVisual::new)
                 .apply();
@@ -383,6 +388,10 @@ public final class LoconauticsClient {
         event.registerBlockEntityRenderer(
                 LoconauticsRegistries.HOSE_WINCH_BE.get(),
                 com.lycoris.loconautics.content.hose.winch.HoseWinchRenderer::new
+        );
+        event.registerBlockEntityRenderer(
+                LoconauticsRegistries.HOSE_NOZZLE_BE.get(),
+                com.lycoris.loconautics.content.hose.nozzle.HoseNozzleRenderer::new
         );
         event.registerBlockEntityRenderer(
                 LoconauticsRegistries.FLUID_HATCH_BE.get(),

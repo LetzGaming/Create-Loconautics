@@ -37,6 +37,7 @@ import dev.ryanhcode.sable.api.sublevel.SubLevelContainer;
 import dev.ryanhcode.sable.sublevel.ServerSubLevel;
 import dev.ryanhcode.sable.sublevel.SubLevel;
 import net.minecraft.core.BlockPos;
+import net.minecraft.util.Mth;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
@@ -89,6 +90,10 @@ public class HoseNozzleBlockEntity extends SmartBlockEntity
     @Nullable private PhysicsConstraintHandle dockConstraint;
     private int undockSafety;
     private long redockReadyTick;
+
+    private static final float HANDLEBAR_FOLD_STEP = 0.125f;
+    private float handlebarFold;
+    private float lastHandlebarFold;
 
     private final IFluidHandler linkSinkHandler = new LinkSink();
     private FluidStack linkFluid = FluidStack.EMPTY;
@@ -183,12 +188,24 @@ public class HoseNozzleBlockEntity extends SmartBlockEntity
             tickLinkSpray(level.getGameTime());
             tickSuction(level.getGameTime());
         } else if (level != null && level.isClientSide) {
+            tickHandlebars();
             var containing = dev.ryanhcode.sable.Sable.HELPER.getContaining(level, getBlockPos());
             if (containing instanceof dev.ryanhcode.sable.sublevel.ClientSubLevel sub) {
                 emitSprayClient(sub);
             }
             emitSuctionClient(containing instanceof dev.ryanhcode.sable.sublevel.ClientSubLevel sub ? sub : null);
         }
+    }
+
+    private void tickHandlebars() {
+        lastHandlebarFold = handlebarFold;
+        float target = getBlockState().getValue(HoseNozzleBlock.POWERED) ? 1.0f : 0.0f;
+        handlebarFold = Mth.clamp(target, handlebarFold - HANDLEBAR_FOLD_STEP, handlebarFold + HANDLEBAR_FOLD_STEP);
+    }
+
+    public float getHandlebarFold(float partialTicks) {
+        float fold = Mth.lerp(partialTicks, lastHandlebarFold, handlebarFold);
+        return fold * fold * (3.0f - 2.0f * fold);
     }
 
     public void setSuckPower(float power) {
